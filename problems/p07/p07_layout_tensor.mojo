@@ -1,7 +1,7 @@
-from std.gpu import thread_idx, block_idx, block_dim
-from std.gpu.host import DeviceContext
+from gpu import thread_idx, block_idx, block_dim
+from gpu.host import DeviceContext
 from layout import Layout, LayoutTensor
-from std.testing import assert_equal
+from testing import assert_equal
 
 # ANCHOR: add_10_blocks_2d_layout_tensor
 comptime SIZE = 5
@@ -12,70 +12,55 @@ comptime out_layout = Layout.row_major(SIZE, SIZE)
 comptime a_layout = Layout.row_major(SIZE, SIZE)
 
 
-def add_10_blocks_2d[
+fn add_10_blocks_2d[
     out_layout: Layout,
     a_layout: Layout,
 ](
     output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
     a: LayoutTensor[dtype, a_layout, ImmutAnyOrigin],
-    size: Int,
+    size: UInt,
 ):
-    var row = block_dim.y * block_idx.y + thread_idx.y
-    var col = block_dim.x * block_idx.x + thread_idx.x
-<<<<<<< HEAD
+    row = block_dim.y * block_idx.y + thread_idx.y
+    col = block_dim.x * block_idx.x + thread_idx.x
     if row < size and col < size:
         output[row, col] = a[row, col] + 10.0
-=======
-    # FILL ME IN (roughly 2 lines)
-
->>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 
 # ANCHOR_END: add_10_blocks_2d_layout_tensor
 
 
-def main() raises:
+def main():
     with DeviceContext() as ctx:
-        var out_buf = ctx.enqueue_create_buffer[dtype](SIZE * SIZE)
+        out_buf = ctx.enqueue_create_buffer[dtype](SIZE * SIZE)
         out_buf.enqueue_fill(0)
-        var out_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](out_buf)
+        out_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](out_buf)
 
-        var expected_buf = ctx.enqueue_create_host_buffer[dtype](SIZE * SIZE)
+        expected_buf = ctx.enqueue_create_host_buffer[dtype](SIZE * SIZE)
         expected_buf.enqueue_fill(1)
 
-        var a = ctx.enqueue_create_buffer[dtype](SIZE * SIZE)
+        a = ctx.enqueue_create_buffer[dtype](SIZE * SIZE)
         a.enqueue_fill(1)
 
         with a.map_to_host() as a_host:
             for j in range(SIZE):
                 for i in range(SIZE):
-                    var k = j * SIZE + i
-<<<<<<< HEAD
-<<<<<<< HEAD
-                    a_host[k] = Scalar[dtype](k)
-                    expected_buf[k] = Scalar[dtype](k + 10)
-=======
+                    k = j * SIZE + i
                     a_host[k] = k
                     expected_buf[k] = k + 10
->>>>>>> 11c7cd4 (Mdoc/fixes (#235))
-=======
-                    a_host[k] = Scalar[dtype](k)
-                    expected_buf[k] = Scalar[dtype](k + 10)
->>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
-        var a_tensor = LayoutTensor[dtype, a_layout, ImmutAnyOrigin](a)
+        a_tensor = LayoutTensor[dtype, a_layout, ImmutAnyOrigin](a)
 
         comptime kernel = add_10_blocks_2d[out_layout, a_layout]
         ctx.enqueue_function[kernel, kernel](
             out_tensor,
             a_tensor,
-            SIZE,
+            UInt(SIZE),
             grid_dim=BLOCKS_PER_GRID,
             block_dim=THREADS_PER_BLOCK,
         )
 
         ctx.synchronize()
 
-        var expected_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](
+        expected_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](
             expected_buf
         )
 
@@ -90,4 +75,3 @@ def main() raises:
                     assert_equal(
                         out_buf_host[i * SIZE + j], expected_buf[i * SIZE + j]
                     )
-            print("Puzzle 07 complete ✅")
