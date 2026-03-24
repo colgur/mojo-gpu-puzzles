@@ -16,8 +16,13 @@ def add_10_blocks(
     size: Int,
 ):
     var i = block_dim.x * block_idx.x + thread_idx.x
+<<<<<<< HEAD
     if i < size:
         output[i] = a[i] + 10.0
+=======
+    # FILL ME IN (roughly 2 lines)
+
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 
 # ANCHOR_END: add_10_blocks
 

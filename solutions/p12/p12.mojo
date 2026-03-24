@@ -40,7 +40,11 @@ def dot_product(
     # and warps can be scheduled independently.
     # However, shared memory does not have such issues as long as we use `barrier()`
     # correctly when we're in the same thread block.
+<<<<<<< HEAD
     var stride = TPB // 2
+=======
+    var stride = UInt(TPB // 2)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     while stride > 0:
         if local_i < stride:
             shared[local_i] += shared[local_i + stride]

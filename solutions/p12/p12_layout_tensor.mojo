@@ -39,7 +39,11 @@ def dot_product[
     barrier()
 
     # Parallel reduction in shared memory
+<<<<<<< HEAD
     var stride = TPB // 2
+=======
+    var stride = UInt(TPB // 2)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     while stride > 0:
         if local_i < stride:
             shared[local_i] += shared[local_i + stride]

@@ -17,7 +17,11 @@ comptime layout = Layout.row_major(SIZE, SIZE)
 
 
 def naive_matmul[
+<<<<<<< HEAD
     layout: Layout, size: Int
+=======
+    layout: Layout, size: UInt
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 ](
     output: LayoutTensor[dtype, layout, MutAnyOrigin],
     a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
@@ -33,7 +37,11 @@ def naive_matmul[
 
 # ANCHOR: single_block_matmul
 def single_block_matmul[
+<<<<<<< HEAD
     layout: Layout, size: Int
+=======
+    layout: Layout, size: UInt
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 ](
     output: LayoutTensor[dtype, layout, MutAnyOrigin],
     a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
@@ -56,7 +64,11 @@ comptime layout_tiled = Layout.row_major(SIZE_TILED, SIZE_TILED)
 
 
 def matmul_tiled[
+<<<<<<< HEAD
     layout: Layout, size: Int
+=======
+    layout: Layout, size: UInt
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 ](
     output: LayoutTensor[dtype, layout_tiled, MutAnyOrigin],
     a: LayoutTensor[dtype, layout_tiled, ImmutAnyOrigin],

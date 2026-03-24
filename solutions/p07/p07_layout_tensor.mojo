@@ -45,8 +45,13 @@ def main() raises:
             for j in range(SIZE):
                 for i in range(SIZE):
                     var k = j * SIZE + i
+<<<<<<< HEAD
                     a_host[k] = Scalar[dtype](k)
                     expected_buf[k] = Scalar[dtype](k + 10)
+=======
+                    a_host[k] = k
+                    expected_buf[k] = k + 10
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 
         var a_tensor = LayoutTensor[dtype, a_layout, ImmutAnyOrigin](a)
 

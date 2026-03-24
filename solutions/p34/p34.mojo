@@ -29,12 +29,20 @@ def cluster_coordination_basics[
     size: Int,
 ):
     """Real cluster coordination using SM90+ cluster APIs."""
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     # Check what's happening with cluster ranks
     var my_block_rank = Int(block_rank_in_cluster())
+<<<<<<< HEAD
     var block_id = block_idx.x
+=======
+    var block_id = Int(block_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 
     var shared_data = LayoutTensor[
         dtype,
@@ -87,10 +95,17 @@ def cluster_collective_operations[
     size: Int,
 ):
     """Cluster-wide collective operations using real cluster APIs."""
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
     var my_block_rank = Int(block_rank_in_cluster())
     var block_id = block_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+    var local_i = Int(thread_idx.x)
+    var my_block_rank = Int(block_rank_in_cluster())
+    var block_id = Int(block_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 
     # Each thread accumulates its data
     var my_value: Float32 = 0.0
@@ -143,10 +158,17 @@ def advanced_cluster_patterns[
 ):
     """Advanced cluster programming using cluster masks and relaxed synchronization.
     """
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
     var my_block_rank = Int(block_rank_in_cluster())
     var block_id = block_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+    var local_i = Int(thread_idx.x)
+    var my_block_rank = Int(block_rank_in_cluster())
+    var block_id = Int(block_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 
     var shared_data = LayoutTensor[
         dtype,

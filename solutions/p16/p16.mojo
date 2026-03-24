@@ -15,7 +15,11 @@ comptime layout = Layout.row_major(SIZE, SIZE)
 
 # ANCHOR: naive_matmul_solution
 def naive_matmul[
+<<<<<<< HEAD
     layout: Layout, size: Int
+=======
+    layout: Layout, size: UInt
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 ](
     output: LayoutTensor[dtype, layout, MutAnyOrigin],
     a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
@@ -38,7 +42,11 @@ def naive_matmul[
 
 # ANCHOR: single_block_matmul_solution
 def single_block_matmul[
+<<<<<<< HEAD
     layout: Layout, size: Int
+=======
+    layout: Layout, size: UInt
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 ](
     output: LayoutTensor[dtype, layout, MutAnyOrigin],
     a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
@@ -88,7 +96,11 @@ comptime layout_tiled = Layout.row_major(SIZE_TILED, SIZE_TILED)
 
 # ANCHOR: matmul_tiled_solution
 def matmul_tiled[
+<<<<<<< HEAD
     layout: Layout, size: Int
+=======
+    layout: Layout, size: UInt
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 ](
     output: LayoutTensor[dtype, layout_tiled, MutAnyOrigin],
     a: LayoutTensor[dtype, layout_tiled, ImmutAnyOrigin],
@@ -153,7 +165,11 @@ comptime BLOCK_DIM_COUNT = 2
 
 
 def matmul_idiomatic_tiled[
+<<<<<<< HEAD
     layout: Layout, size: Int
+=======
+    layout: Layout, size: UInt
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 ](
     output: LayoutTensor[dtype, layout_tiled, MutAnyOrigin],
     a: LayoutTensor[dtype, layout_tiled, ImmutAnyOrigin],
@@ -165,7 +181,11 @@ def matmul_idiomatic_tiled[
     var tiled_col = block_idx.x * TPB + local_col
 
     # Get the tile of the output matrix that this thread block is responsible for
+<<<<<<< HEAD
     var out_tile = output.tile[TPB, TPB](block_idx.y, block_idx.x)
+=======
+    var out_tile = output.tile[TPB, TPB](Int(block_idx.y), Int(block_idx.x))
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     var a_shared = LayoutTensor[
         dtype,
         Layout.row_major(TPB, TPB),
@@ -190,8 +210,13 @@ def matmul_idiomatic_tiled[
         size // TPB
     ):  # Perfect division: 9 // 3 = 3 tiles
         # Get tiles from A and B matrices
+<<<<<<< HEAD
         var a_tile = a.tile[TPB, TPB](block_idx.y, Int(idx))
         var b_tile = b.tile[TPB, TPB](Int(idx), block_idx.x)
+=======
+        var a_tile = a.tile[TPB, TPB](Int(block_idx.y), Int(idx))
+        var b_tile = b.tile[TPB, TPB](Int(idx), Int(block_idx.x))
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 
         # Asynchronously copy tiles to shared memory with consistent orientation
         copy_dram_to_sram_async[

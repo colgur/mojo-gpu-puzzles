@@ -29,7 +29,11 @@ def block_sum_dot_product[
     """Dot product using block.sum() - convenience function like warp.sum()!
     Replaces manual shared memory + barriers + tree reduction with one line."""
 
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     # Each thread computes partial product
@@ -70,8 +74,13 @@ def traditional_dot_product[
         MutAnyOrigin,
         address_space=AddressSpace.SHARED,
     ].stack_allocation()
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+    var local_i = Int(thread_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 
     # Each thread computes partial product
     if global_i < size:
@@ -118,8 +127,13 @@ def block_histogram_bin_extract[
     3. Extract and pack only elements belonging to target_bin
     """
 
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+    var local_i = Int(thread_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 
     # Step 1: Each thread determines its bin and element value
     var my_value: Scalar[dtype] = 0.0
@@ -154,7 +168,11 @@ def block_histogram_bin_extract[
     # Step 5: Final thread computes total count for this bin
     if local_i == tpb - 1:
         # Inclusive sum = exclusive sum + my contribution
+<<<<<<< HEAD
         var total_count = write_offset[0] + Int32(belongs_to_target)
+=======
+        var total_count = write_offset[0] + belongs_to_target
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
         count_output[0] = total_count
 
 
@@ -180,7 +198,11 @@ def block_normalize_vector[
     4. Each thread normalizes: output[i] = input[i] / mean
     """
 
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     # Step 1: Each thread loads its element

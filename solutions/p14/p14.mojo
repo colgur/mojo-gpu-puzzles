@@ -35,7 +35,11 @@ def prefix_sum_simple[
 
     barrier()
 
+<<<<<<< HEAD
     var offset = 1
+=======
+    var offset = UInt(1)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     for i in range(Int(log2(Scalar[dtype](TPB)))):
         var current_val: output.element_type = 0
         if local_i >= offset and local_i < size:
@@ -102,7 +106,11 @@ def prefix_sum_local_phase[
     # Iteration 3 (offset=4):
     #   Block 0: [0,1,3,6,10+0,14+1,18+3,22+6] = [0,1,3,6,10,15,21,28]
     #   Block 1 follows same pattern to get [8,17,27,38,50,63,77,???]
+<<<<<<< HEAD
     var offset = 1
+=======
+    var offset = UInt(1)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     for i in range(Int(log2(Scalar[dtype](TPB)))):
         var current_val: output.element_type = 0
         if local_i >= offset and local_i < TPB:
@@ -134,7 +142,11 @@ def prefix_sum_local_phase[
 # Kernel 2: Add block sums to their respective blocks
 def prefix_sum_block_sum_phase[
     layout: Layout
+<<<<<<< HEAD
 ](output: LayoutTensor[dtype, layout, MutAnyOrigin], size: Int):
+=======
+](output: LayoutTensor[dtype, layout, MutAnyOrigin], size: UInt):
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 
     # Second pass: add previous block's sum to each element

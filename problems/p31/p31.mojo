@@ -24,7 +24,11 @@ def minimal_kernel[
     size: Int,
 ):
     """Minimal SAXPY kernel - simple and register-light for high occupancy."""
+<<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     if i < size:
         # Direct computation: y[i] = alpha * x[i] + y[i]
         # Uses minimal registers (~8), no shared memory
@@ -53,7 +57,11 @@ def sophisticated_kernel[
         address_space=AddressSpace.SHARED,
     ].stack_allocation()  # 48KB
 
+<<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     if i < size:
@@ -150,7 +158,11 @@ def balanced_kernel[
         address_space=AddressSpace.SHARED,
     ].stack_allocation()  # 16KB total
 
+<<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     if i < size:
@@ -333,7 +345,11 @@ def test_minimal() raises:
         # Verify results: y[i] = alpha * x[i] + original_y[i]
         with y.map_to_host() as y_host, x.map_to_host() as x_host:
             for i in range(10):  # Check first 10
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
+=======
+                var expected = ALPHA * x_host[i] + Float32(
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]
@@ -376,7 +392,11 @@ def test_sophisticated() raises:
         # Verify results: y[i] = alpha * x[i] + original_y[i] (with precision tolerance)
         with y.map_to_host() as y_host, x.map_to_host() as x_host:
             for i in range(10):  # Check first 10
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
+=======
+                var expected = ALPHA * x_host[i] + Float32(
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]
@@ -420,7 +440,11 @@ def test_balanced() raises:
         # Verify results: y[i] = alpha * x[i] + original_y[i] (with precision tolerance)
         with y.map_to_host() as y_host, x.map_to_host() as x_host:
             for i in range(10):  # Check first 10
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
+=======
+                var expected = ALPHA * x_host[i] + Float32(
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]

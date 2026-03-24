@@ -18,8 +18,12 @@ def broadcast_add(
 ):
     var row = thread_idx.y
     var col = thread_idx.x
+<<<<<<< HEAD
     if row < size and col < size:
         output[row * size + col] = a[col] + b[row]
+=======
+    # FILL ME IN (roughly 2 lines)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 
 
 # ANCHOR_END: broadcast_add

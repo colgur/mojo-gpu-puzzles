@@ -33,7 +33,11 @@ def embedding_kernel_coalesced[
     """
 
     # Simple 1D indexing - each thread = one output element
+<<<<<<< HEAD
     var global_idx = block_idx.x * block_dim.x + thread_idx.x
+=======
+    var global_idx = Int(block_idx.x * block_dim.x + thread_idx.x)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
     var total_elements = batch_size * seq_len * embed_dim
 
     if global_idx >= total_elements:
@@ -85,8 +89,13 @@ def embedding_kernel_2d[
     """
 
     # 2D grid indexing
+<<<<<<< HEAD
     var batch_seq_idx = block_idx.x * block_dim.x + thread_idx.x
     var embed_idx = block_idx.y * block_dim.y + thread_idx.y
+=======
+    var batch_seq_idx = Int(block_idx.x * block_dim.x + thread_idx.x)
+    var embed_idx = Int(block_idx.y * block_dim.y + thread_idx.y)
+>>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 
     var total_positions = batch_size * seq_len
 
