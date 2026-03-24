@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from std.memory import UnsafePointer, stack_allocation
+from std.gpu import thread_idx, block_idx, block_dim, barrier
+from std.gpu.host import DeviceContext
+from std.gpu.memory import AddressSpace
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.testing import assert_equal
 
 comptime TPB = 8
@@ -19,6 +26,7 @@ comptime OutLayout = type_of(out_layout)
 
 # ANCHOR: dot_product_solution
 def dot_product(
+<<<<<<< HEAD
     output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
     b: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -31,12 +39,27 @@ def dot_product(
     var local_i = thread_idx.x
 
     # Compute element-wise multiplication into shared memory
+=======
+    output: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    a: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    b: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    size: UInt,
+):
+    var shared = stack_allocation[
+        TPB,
+        Scalar[dtype],
+        address_space=AddressSpace.SHARED,
+    ]()
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     if global_i < size:
         shared[local_i] = a[global_i] * b[global_i]
 
     # Synchronize threads within block
     barrier()
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     # The following causes race condition: all threads writing to the same location
     # out[0] += shared[local_i]
@@ -51,15 +74,32 @@ def dot_product(
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     # Parallel reduction in shared memory
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
     var stride = TPB // 2
 =======
+<<<<<<< HEAD
     var stride = UInt(TPB // 2)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var stride = TPB // 2
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    # The following causes race condition: all threads writing to the same location
+    # out[0] += shared[local_i]
+
+    # Instead can do parallel reduction in shared memory as opposed to
+    # global memory which has no guarantee on synchronization.
+    # Loops using global memory can cause thread divergence because
+    # fundamentally GPUs execute threads in warps (groups of 32 threads typically)
+    # and warps can be scheduled independently.
+    # However, shared memory does not have such issues as long as we use `barrier()`
+    # correctly when we're in the same thread block.
+    var stride = UInt(TPB // 2)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     while stride > 0:
         if local_i < stride:
             shared[local_i] += shared[local_i + stride]

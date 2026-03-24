@@ -1,9 +1,13 @@
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.testing import assert_equal
 
 comptime TPB = 8
@@ -19,17 +23,35 @@ comptime OutLayout = type_of(out_layout)
 
 
 # ANCHOR: axis_sum_solution
+<<<<<<< HEAD
 def axis_sum(
     output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, InLayout, ImmutAnyOrigin],
     size: Int,
+=======
+def axis_sum[
+    in_layout: Layout, out_layout: Layout
+](
+    output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
+    size: UInt,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ):
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
     var batch = block_idx.y
+<<<<<<< HEAD
     var cache = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[TPB]())
+=======
+    var cache = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     # Visualize:
     # Block(0,0): [T0,T1,T2,T3,T4,T5,T6,T7] -> Row 0: [0,1,2,3,4,5]
@@ -50,6 +72,7 @@ def axis_sum(
     # do reduction sum per each block
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var stride = TPB // 2
 =======
     var stride = UInt(TPB // 2)
@@ -57,6 +80,12 @@ def axis_sum(
 =======
     var stride = TPB // 2
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var stride = TPB // 2
+=======
+    var stride = UInt(TPB // 2)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     while stride > 0:
         # Read phase: all threads read the values they need first to avoid race conditions
         var temp_val: output.ElementType = 0
@@ -91,8 +120,13 @@ def main() raises:
                 for col in range(SIZE):
                     inp_host[row * SIZE + col] = Scalar[dtype](row * SIZE + col)
 
+<<<<<<< HEAD
         var out_tensor = TileTensor(out, out_layout)
         var inp_tensor = TileTensor[mut=False, dtype, InLayout](inp, in_layout)
+=======
+        var out_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](out)
+        var inp_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](inp)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         ctx.enqueue_function[axis_sum, axis_sum](
             out_tensor,

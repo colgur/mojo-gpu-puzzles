@@ -43,6 +43,7 @@ mojo = "<1.0.0" # includes `mojo-compiler`, lsp, debugger, formatter etc.
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 max = "==26.3.0.dev2026033105"
 =======
 max = "==26.3.0.dev2026032405"
@@ -53,6 +54,12 @@ max = "==26.3.0.dev2026033105"
 =======
 max = "==26.3.0.dev2026042005"
 >>>>>>> ff53970 (update atomic import (#242))
+=======
+max = "==26.3.0.dev2026042005"
+=======
+max = "==26.3.0.dev2026032405"
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 bash = ">=5.2.21,<6"
 manim = ">=0.18.1,<0.19"
 mdbook = ">=0.4.48,<0.5"

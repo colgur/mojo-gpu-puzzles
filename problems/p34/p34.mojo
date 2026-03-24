@@ -8,9 +8,13 @@ from std.gpu.primitives.cluster import (
     elect_one_sync,
 )
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_equal, assert_almost_equal, assert_true
 
@@ -28,13 +32,18 @@ comptime ClusterLayoutType = type_of(cluster_layout)
 
 # ANCHOR: cluster_coordination_basics
 def cluster_coordination_basics[
+<<<<<<< HEAD
     tpb: Int
+=======
+    in_layout: Layout, out_layout: Layout, tpb: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, ClusterLayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, InLayoutType, ImmutAnyOrigin],
     size: Int,
 ):
     """Real cluster coordination using SM90+ cluster APIs."""
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
@@ -44,12 +53,21 @@ def cluster_coordination_basics[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     # Check what's happening with cluster ranks
     var my_block_rank = Int(block_rank_in_cluster())
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var block_id = block_idx.x
 =======
     var block_id = Int(block_idx.x)
@@ -61,6 +79,16 @@ def cluster_coordination_basics[
     var shared_data = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[tpb]())
+=======
+    var block_id = Int(block_idx.x)
+
+    var shared_data = LayoutTensor[
+        dtype,
+        Layout.row_major(tpb),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     # FIX: Use block_idx.x for data distribution instead of cluster rank
     # Each block should process different portions of the data
@@ -96,7 +124,11 @@ def cluster_coordination_basics[
 
 # ANCHOR: cluster_collective_operations
 def cluster_collective_operations[
+<<<<<<< HEAD
     tpb: Int
+=======
+    in_layout: Layout, out_layout: Layout, tpb: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, OutLayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, InLayoutType, ImmutAnyOrigin],
@@ -106,16 +138,23 @@ def cluster_collective_operations[
     """Cluster-wide collective operations using real cluster APIs."""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
+<<<<<<< HEAD
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     # FILL IN (roughly 24 lines)
 
@@ -125,7 +164,11 @@ def cluster_collective_operations[
 
 # ANCHOR: advanced_cluster_patterns
 def advanced_cluster_patterns[
+<<<<<<< HEAD
     tpb: Int
+=======
+    in_layout: Layout, out_layout: Layout, tpb: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, ClusterLayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, InLayoutType, ImmutAnyOrigin],
@@ -135,16 +178,23 @@ def advanced_cluster_patterns[
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
+<<<<<<< HEAD
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     # FILL IN (roughly 26 lines)
 
@@ -232,11 +282,23 @@ def main() raises:
 
             print("Expected sum:", expected_sum)
 
+<<<<<<< HEAD
             input_tensor = TileTensor[
                 mut=False, dtype, InLayoutType, ImmutAnyOrigin
             ](input_buf, in_layout)
             var output_tensor = TileTensor(output_buf, out_layout)
             var temp_tensor = TileTensor(temp_buf, cluster_layout)
+=======
+            input_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](
+                input_buf
+            )
+            var output_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](
+                output_buf
+            )
+            var temp_tensor = LayoutTensor[
+                dtype, Layout.row_major(CLUSTER_SIZE), MutAnyOrigin
+            ](temp_buf)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
             comptime kernel = cluster_collective_operations[TPB]
             ctx.enqueue_function[kernel, kernel](

@@ -18,7 +18,11 @@ def add_10_blocks_2d[
 ](
     output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
     a: LayoutTensor[dtype, a_layout, ImmutAnyOrigin],
+<<<<<<< HEAD
     size: Int,
+=======
+    size: UInt,
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 ):
     var row = block_dim.y * block_idx.y + thread_idx.y
     var col = block_dim.x * block_idx.x + thread_idx.x
@@ -47,6 +51,7 @@ def main() raises:
                     var k = j * SIZE + i
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     a_host[k] = Scalar[dtype](k)
                     expected_buf[k] = Scalar[dtype](k + 10)
 =======
@@ -57,6 +62,10 @@ def main() raises:
                     a_host[k] = Scalar[dtype](k)
                     expected_buf[k] = Scalar[dtype](k + 10)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+                    a_host[k] = k
+                    expected_buf[k] = k + 10
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
         var a_tensor = LayoutTensor[dtype, a_layout, ImmutAnyOrigin](a)
 
@@ -64,7 +73,11 @@ def main() raises:
         ctx.enqueue_function[kernel, kernel](
             out_tensor,
             a_tensor,
+<<<<<<< HEAD
             SIZE,
+=======
+            UInt(SIZE),
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
             grid_dim=BLOCKS_PER_GRID,
             block_dim=THREADS_PER_BLOCK,
         )
@@ -86,4 +99,7 @@ def main() raises:
                     assert_equal(
                         out_buf_host[i * SIZE + j], expected_buf[i * SIZE + j]
                     )
+<<<<<<< HEAD
             print("Puzzle 07 complete ✅")
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))

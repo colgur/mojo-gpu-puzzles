@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from std.memory import UnsafePointer, stack_allocation
+from std.gpu import thread_idx, block_idx, block_dim, barrier
+from std.gpu.host import DeviceContext
+from std.gpu.memory import AddressSpace
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.testing import assert_equal
 
 # ANCHOR: add_10_shared
@@ -17,6 +24,7 @@ comptime LayoutType = type_of(layout)
 
 
 def add_10_shared(
+<<<<<<< HEAD
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
     size: Int,
@@ -29,6 +37,20 @@ def add_10_shared(
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 
+=======
+    output: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    a: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    size: UInt,
+):
+    var shared = stack_allocation[
+        TPB,
+        Scalar[dtype],
+        address_space=AddressSpace.SHARED,
+    ]()
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+    # Load local data into shared memory
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     if global_i < size:
         shared[local_i] = a[global_i]
 

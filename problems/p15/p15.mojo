@@ -4,9 +4,13 @@ from std.gpu.host import DeviceContext
 # ANCHOR: axis_sum
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
 
 comptime TPB = 8
@@ -21,10 +25,19 @@ comptime out_layout = row_major[BATCH, 1]()
 comptime OutLayout = type_of(out_layout)
 
 
+<<<<<<< HEAD
 def axis_sum(
     output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, InLayout, ImmutAnyOrigin],
     size: Int,
+=======
+def axis_sum[
+    in_layout: Layout, out_layout: Layout
+](
+    output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
+    size: UInt,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ):
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
@@ -46,8 +59,13 @@ def main() raises:
                 for col in range(SIZE):
                     inp_host[row * SIZE + col] = Scalar[dtype](row * SIZE + col)
 
+<<<<<<< HEAD
         var out_tensor = TileTensor(out, out_layout)
         var inp_tensor = TileTensor[mut=False, dtype, InLayout](inp, in_layout)
+=======
+        var out_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](out)
+        var inp_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](inp)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         ctx.enqueue_function[axis_sum, axis_sum](
             out_tensor,

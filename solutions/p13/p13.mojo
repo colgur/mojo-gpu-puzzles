@@ -1,9 +1,13 @@
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_equal
 
@@ -22,6 +26,7 @@ comptime ConvLayout = type_of(conv_layout)
 
 
 # ANCHOR: conv_1d_simple_solution
+<<<<<<< HEAD
 def conv_1d_simple(
     output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, InLayout, ImmutAnyOrigin],
@@ -57,7 +62,33 @@ def conv_1d_simple(
     var shared_b = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[CONV]())
+<<<<<<< HEAD
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+=======
+def conv_1d_simple[
+    in_layout: Layout, out_layout: Layout, conv_layout: Layout
+](
+    output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
+    b: LayoutTensor[dtype, conv_layout, ImmutAnyOrigin],
+):
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = Int(thread_idx.x)
+    var shared_a = LayoutTensor[
+        dtype,
+        Layout.row_major(SIZE),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var shared_b = LayoutTensor[
+        dtype,
+        Layout.row_major(CONV),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     if global_i < SIZE:
         shared_a[local_i] = a[global_i]
 
@@ -106,6 +137,7 @@ comptime Conv2Layout = type_of(conv_2_layout)
 
 
 # ANCHOR: conv_1d_block_boundary_solution
+<<<<<<< HEAD
 def conv_1d_block_boundary(
     output: TileTensor[mut=True, dtype, Out2Layout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, In2Layout, ImmutAnyOrigin],
@@ -130,6 +162,30 @@ def conv_1d_block_boundary(
     var shared_b = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[CONV_2]())
+=======
+def conv_1d_block_boundary[
+    in_layout: Layout, out_layout: Layout, conv_layout: Layout, dtype: DType
+](
+    output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
+    b: LayoutTensor[dtype, conv_layout, ImmutAnyOrigin],
+):
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+    var local_i = Int(thread_idx.x)
+    # first: need to account for padding
+    var shared_a = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB + CONV_2 - 1),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var shared_b = LayoutTensor[
+        dtype,
+        Layout.row_major(CONV_2),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     if global_i < SIZE_2:
         shared_a[local_i] = a[global_i]
     else:

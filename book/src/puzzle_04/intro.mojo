@@ -1,6 +1,10 @@
 from std.gpu.host import DeviceContext
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
 comptime HEIGHT = 2
 comptime WIDTH = 3
@@ -9,9 +13,15 @@ comptime layout = row_major[HEIGHT, WIDTH]()
 comptime LayoutType = type_of(layout)
 
 
+<<<<<<< HEAD
 def kernel(
     tensor: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
 ):
+=======
+def kernel[
+    dtype: DType, layout: Layout
+](tensor: LayoutTensor[dtype, layout, MutAnyOrigin]):
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     print("Before:")
     print(tensor)
     tensor[0, 0] += 1

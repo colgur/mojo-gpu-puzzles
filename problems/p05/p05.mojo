@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 from std.gpu import thread_idx
 from std.gpu.host import DeviceContext
 from layout import TileTensor
 from layout.tile_layout import row_major
+=======
+from std.memory import UnsafePointer
+from std.gpu import thread_idx
+from std.gpu.host import DeviceContext
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.testing import assert_equal
 
 # ANCHOR: broadcast_add
@@ -18,10 +24,17 @@ comptime BLayout = type_of(b_layout)
 
 
 def broadcast_add(
+<<<<<<< HEAD
     output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, ALayout, ImmutAnyOrigin],
     b: TileTensor[mut=False, dtype, BLayout, ImmutAnyOrigin],
     size: Int,
+=======
+    output: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    a: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    b: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    size: UInt,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ):
     var row = thread_idx.y
     var col = thread_idx.x
@@ -32,6 +45,7 @@ def broadcast_add(
 # ANCHOR_END: broadcast_add
 def main() raises:
     with DeviceContext() as ctx:
+<<<<<<< HEAD
         var out_buf = ctx.enqueue_create_buffer[dtype](SIZE * SIZE)
         out_buf.enqueue_fill(0)
         var out_tensor = TileTensor(out_buf, out_layout)
@@ -41,6 +55,12 @@ def main() raises:
         expected_buf.enqueue_fill(0)
         var expected_tensor = TileTensor(expected_buf, out_layout)
 
+=======
+        var out = ctx.enqueue_create_buffer[dtype](SIZE * SIZE)
+        out.enqueue_fill(0)
+        var expected = ctx.enqueue_create_host_buffer[dtype](SIZE * SIZE)
+        expected.enqueue_fill(0)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         var a = ctx.enqueue_create_buffer[dtype](SIZE)
         a.enqueue_fill(0)
         var b = ctx.enqueue_create_buffer[dtype](SIZE)

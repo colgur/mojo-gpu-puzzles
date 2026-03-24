@@ -1,8 +1,11 @@
-from std.gpu import thread_idx, block_idx, block_dim, barrier
+from std.testing import assert_equal
 from std.gpu.host import DeviceContext
+
+# ANCHOR: dot_product_layout_tensor
+from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.memory import AddressSpace
 from layout import Layout, LayoutTensor
-from std.testing import assert_equal
+
 
 comptime TPB = 8
 comptime SIZE = 8
@@ -13,62 +16,19 @@ comptime layout = Layout.row_major(SIZE)
 comptime out_layout = Layout.row_major(1)
 
 
-# ANCHOR: dot_product_layout_tensor_solution
 def dot_product[
     in_layout: Layout, out_layout: Layout
 ](
     output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
     a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
     b: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
-<<<<<<< HEAD
-    size: Int,
-=======
     size: UInt,
->>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 ):
-    var shared = LayoutTensor[
-        dtype,
-        Layout.row_major(TPB),
-        MutAnyOrigin,
-        address_space=AddressSpace.SHARED,
-    ].stack_allocation()
-    var global_i = block_dim.x * block_idx.x + thread_idx.x
-    var local_i = thread_idx.x
-
-    # Compute element-wise multiplication into shared memory
-    if global_i < size:
-        shared[local_i] = a[global_i] * b[global_i]
-
-    # Synchronize threads within block
-    barrier()
-
-    # Parallel reduction in shared memory
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    var stride = TPB // 2
-=======
-    var stride = UInt(TPB // 2)
->>>>>>> 11c7cd4 (Mdoc/fixes (#235))
-=======
-    var stride = TPB // 2
->>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
-=======
-    var stride = UInt(TPB // 2)
->>>>>>> 0c6dc9a (Mdoc/fixes (#235))
-    while stride > 0:
-        if local_i < stride:
-            shared[local_i] += shared[local_i + stride]
-
-        barrier()
-        stride //= 2
-
-    # Only thread 0 writes the final result
-    if local_i == 0:
-        output[0] = shared[0]
+    # FILL ME IN (roughly 13 lines)
+    ...
 
 
-# ANCHOR_END: dot_product_layout_tensor_solution
+# ANCHOR_END: dot_product_layout_tensor
 
 
 def main() raises:
@@ -82,13 +42,8 @@ def main() raises:
 
         with a.map_to_host() as a_host, b.map_to_host() as b_host:
             for i in range(SIZE):
-<<<<<<< HEAD
-                a_host[i] = Scalar[dtype](i)
-                b_host[i] = Scalar[dtype](i)
-=======
                 a_host[i] = i
                 b_host[i] = i
->>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
         var out_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](out)
         var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
@@ -99,11 +54,7 @@ def main() raises:
             out_tensor,
             a_tensor,
             b_tensor,
-<<<<<<< HEAD
-            SIZE,
-=======
             UInt(SIZE),
->>>>>>> 0c6dc9a (Mdoc/fixes (#235))
             grid_dim=BLOCKS_PER_GRID,
             block_dim=THREADS_PER_BLOCK,
         )
@@ -120,7 +71,3 @@ def main() raises:
             print("out:", out_host)
             print("expected:", expected)
             assert_equal(out_host[0], expected[0])
-<<<<<<< HEAD
-            print("Puzzle 12 complete ✅")
-=======
->>>>>>> 0c6dc9a (Mdoc/fixes (#235))

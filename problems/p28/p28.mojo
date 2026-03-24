@@ -1,9 +1,13 @@
 from std.gpu import thread_idx, block_idx, block_dim, grid_dim, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace, async_copy_wait_all
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from layout.layout_tensor import copy_dram_to_sram_async
 from std.sys import argv, info
 from std.testing import assert_equal, assert_almost_equal
@@ -26,7 +30,11 @@ comptime KernelLayoutType = type_of(kernel_layout)
 
 
 def async_copy_overlap_convolution[
+<<<<<<< HEAD
     dtype: DType
+=======
+    dtype: DType, layout: Layout
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutAsyncType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutAsyncType, ImmutAnyOrigin],
@@ -39,12 +47,27 @@ def async_copy_overlap_convolution[
     """
 
     # Shared memory buffers (like p14, but without .fill(0) to avoid race)
+<<<<<<< HEAD
     var input_shared = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[CONV_TILE_SIZE]())
     var kernel_shared = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[KERNEL_SIZE]())
+=======
+    var input_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(CONV_TILE_SIZE),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var kernel_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(KERNEL_SIZE),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     # FILL IN HERE (roughly 19 lines)
 
@@ -72,6 +95,7 @@ def test_async_copy_overlap_convolution() raises:
             for i in range(KERNEL_SIZE):
                 kernel_host[i] = Scalar[dtype](i + 1)
 
+<<<<<<< HEAD
         var input_tensor = TileTensor[
             mut=False, dtype, LayoutAsyncType, ImmutAnyOrigin
         ](input_buf, layout_async)
@@ -79,6 +103,17 @@ def test_async_copy_overlap_convolution() raises:
         var kernel_tensor = TileTensor[mut=False, dtype, KernelLayoutType](
             kernel_buf, kernel_layout
         )
+=======
+        var input_tensor = LayoutTensor[dtype, layout_async, ImmutAnyOrigin](
+            input_buf
+        )
+        var output_tensor = LayoutTensor[dtype, layout_async, MutAnyOrigin](
+            output_buf
+        )
+        var kernel_tensor = LayoutTensor[
+            mut=False, dtype, Layout.row_major(KERNEL_SIZE)
+        ](kernel_buf)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = async_copy_overlap_convolution[dtype]
         ctx.enqueue_function[kernel, kernel](

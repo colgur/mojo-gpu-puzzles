@@ -1,12 +1,20 @@
 from std.gpu import thread_idx, block_idx, block_dim, grid_dim, barrier
+<<<<<<< HEAD
 from std.atomic import Atomic
+=======
+from std.os.atomic import Atomic
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.gpu.primitives.warp import WARP_SIZE
 from std.gpu.primitives import block
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_equal
 from std.math import floor
@@ -23,7 +31,11 @@ comptime OutLayout = type_of(out_layout)
 
 # ANCHOR: block_sum_dot_product_solution
 def block_sum_dot_product[
+<<<<<<< HEAD
     tpb: Int
+=======
+    in_layout: Layout, out_layout: Layout, tpb: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, InLayout, ImmutAnyOrigin],
@@ -35,6 +47,7 @@ def block_sum_dot_product[
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -42,6 +55,12 @@ def block_sum_dot_product[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     # Each thread computes partial product
@@ -66,7 +85,11 @@ def block_sum_dot_product[
 
 # ANCHOR: traditional_dot_product_solution
 def traditional_dot_product[
+<<<<<<< HEAD
     tpb: Int
+=======
+    in_layout: Layout, out_layout: Layout, tpb: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, InLayout, ImmutAnyOrigin],
@@ -77,6 +100,7 @@ def traditional_dot_product[
     Educational but complex - shows the manual coordination needed."""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     var shared = LayoutTensor[
         dtype,
         Layout.row_major(tpb),
@@ -86,6 +110,8 @@ def traditional_dot_product[
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var shared = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[tpb]())
@@ -93,6 +119,7 @@ def traditional_dot_product[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
+<<<<<<< HEAD
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
@@ -100,6 +127,17 @@ def traditional_dot_product[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var shared = LayoutTensor[
+        dtype,
+        Layout.row_major(tpb),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+    var local_i = Int(thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     # Each thread computes partial product
     if global_i < size:
@@ -130,7 +168,11 @@ comptime BinLayout = type_of(bin_layout)
 
 # ANCHOR: block_histogram_solution
 def block_histogram_bin_extract[
+<<<<<<< HEAD
     tpb: Int
+=======
+    in_layout: Layout, bin_layout: Layout, out_layout: Layout, tpb: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     input_data: TileTensor[mut=False, dtype, InLayout, ImmutAnyOrigin],
     bin_output: TileTensor[mut=True, dtype, BinLayout, MutAnyOrigin],
@@ -149,16 +191,23 @@ def block_histogram_bin_extract[
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
+<<<<<<< HEAD
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     # Step 1: Each thread determines its bin and element value
     var my_value: Scalar[dtype] = 0.0
@@ -195,6 +244,7 @@ def block_histogram_bin_extract[
         # Inclusive sum = exclusive sum + my contribution
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         var total_count = write_offset[0] + Int32(belongs_to_target)
 =======
         var total_count = write_offset[0] + belongs_to_target
@@ -202,6 +252,12 @@ def block_histogram_bin_extract[
 =======
         var total_count = write_offset[0] + Int32(belongs_to_target)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+        var total_count = write_offset[0] + Int32(belongs_to_target)
+=======
+        var total_count = write_offset[0] + belongs_to_target
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
         count_output[0] = total_count
 
 
@@ -213,7 +269,11 @@ comptime VectorLayout = type_of(vector_layout)
 
 # ANCHOR: block_normalize_solution
 def block_normalize_vector[
+<<<<<<< HEAD
     tpb: Int
+=======
+    in_layout: Layout, out_layout: Layout, tpb: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     input_data: TileTensor[mut=False, dtype, InLayout, ImmutAnyOrigin],
     output_data: TileTensor[mut=True, dtype, VectorLayout, MutAnyOrigin],
@@ -230,6 +290,7 @@ def block_normalize_vector[
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -237,6 +298,12 @@ def block_normalize_vector[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     # Step 1: Each thread loads its element
@@ -417,8 +484,17 @@ def main() raises:
                 var bin_count = ctx.enqueue_create_buffer[DType.int32](1)
                 bin_count.enqueue_fill(0)
 
+<<<<<<< HEAD
                 var bin_tensor = TileTensor(bin_data, bin_layout)
                 var count_tensor = TileTensor(bin_count, out_layout)
+=======
+                var bin_tensor = LayoutTensor[dtype, bin_layout, MutAnyOrigin](
+                    bin_data
+                )
+                var count_tensor = LayoutTensor[
+                    DType.int32, out_layout, MutAnyOrigin
+                ](bin_count)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
                 # Execute histogram kernel for this specific bin
                 comptime kernel = block_histogram_bin_extract[TPB]
@@ -487,10 +563,19 @@ def main() raises:
             print("Mean value:", mean_value)
             print()
 
+<<<<<<< HEAD
             input_tensor = TileTensor[mut=False, dtype, InLayout](
                 input_buf, in_layout
             )
             var output_tensor = TileTensor(output_buf, vector_layout)
+=======
+            input_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](
+                input_buf
+            )
+            var output_tensor = LayoutTensor[
+                dtype, vector_layout, MutAnyOrigin
+            ](output_buf)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
             # Execute vector normalization kernel
             comptime kernel = block_normalize_vector[TPB]

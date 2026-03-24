@@ -5,9 +5,13 @@ from std.gpu.host import DeviceContext
 # ANCHOR: naive_matmul
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
 
 comptime TPB = 3
@@ -19,6 +23,7 @@ comptime layout = row_major[SIZE, SIZE]()
 comptime LayoutType = type_of(layout)
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 def naive_matmul[
 <<<<<<< HEAD
@@ -35,11 +40,24 @@ def naive_matmul[
     a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
     b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
 =======
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 def naive_matmul(
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
     b: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
+<<<<<<< HEAD
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+=======
+def naive_matmul[
+    layout: Layout, size: UInt
+](
+    output: LayoutTensor[dtype, layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+    b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 ):
     var row = block_dim.y * block_idx.y + thread_idx.y
     var col = block_dim.x * block_idx.x + thread_idx.x
@@ -50,6 +68,7 @@ def naive_matmul(
 
 
 # ANCHOR: single_block_matmul
+<<<<<<< HEAD
 <<<<<<< HEAD
 def single_block_matmul[
 <<<<<<< HEAD
@@ -66,11 +85,24 @@ def single_block_matmul[
     a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
     b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
 =======
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 def single_block_matmul(
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
     b: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
+<<<<<<< HEAD
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+=======
+def single_block_matmul[
+    layout: Layout, size: UInt
+](
+    output: LayoutTensor[dtype, layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+    b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 ):
     var row = block_dim.y * block_idx.y + thread_idx.y
     var col = block_dim.x * block_idx.x + thread_idx.x
@@ -90,6 +122,7 @@ comptime LayoutTiledType = type_of(layout_tiled)
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 def matmul_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -105,11 +138,24 @@ def matmul_tiled[
     a: LayoutTensor[dtype, layout_tiled, ImmutAnyOrigin],
     b: LayoutTensor[dtype, layout_tiled, ImmutAnyOrigin],
 =======
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 def matmul_tiled(
     output: TileTensor[mut=True, dtype, LayoutTiledType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutTiledType, ImmutAnyOrigin],
     b: TileTensor[mut=False, dtype, LayoutTiledType, ImmutAnyOrigin],
+<<<<<<< HEAD
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+=======
+def matmul_tiled[
+    layout: Layout, size: UInt
+](
+    output: LayoutTensor[dtype, layout_tiled, MutAnyOrigin],
+    a: LayoutTensor[dtype, layout_tiled, ImmutAnyOrigin],
+    b: LayoutTensor[dtype, layout_tiled, ImmutAnyOrigin],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 ):
     var local_row = thread_idx.y
     var local_col = thread_idx.x
@@ -158,9 +204,15 @@ def main() raises:
                             inp1_host[i * size + k] * inp2_host[k * size + j]
                         )
 
+<<<<<<< HEAD
         var out_tensor = TileTensor(out, layout)
         var a_tensor = TileTensor[mut=False, dtype, LayoutType](inp1, layout)
         var b_tensor = TileTensor[mut=False, dtype, LayoutType](inp2, layout)
+=======
+        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
+        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](inp1)
+        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](inp2)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         if argv()[1] == "--naive":
             ctx.enqueue_function[naive_matmul, naive_matmul](
@@ -180,6 +232,7 @@ def main() raises:
             )
         elif argv()[1] == "--tiled":
             # Need to update the layout of the tensors to the tiled layout
+<<<<<<< HEAD
             var out_tensor_tiled = TileTensor(out, layout_tiled)
             var a_tensor_tiled = TileTensor[mut=False, dtype, LayoutTiledType](
                 inp1, layout_tiled
@@ -187,6 +240,17 @@ def main() raises:
             var b_tensor_tiled = TileTensor[mut=False, dtype, LayoutTiledType](
                 inp2, layout_tiled
             )
+=======
+            var out_tensor_tiled = LayoutTensor[
+                dtype, layout_tiled, MutAnyOrigin
+            ](out)
+            var a_tensor_tiled = LayoutTensor[
+                dtype, layout_tiled, ImmutAnyOrigin
+            ](inp1)
+            var b_tensor_tiled = LayoutTensor[
+                dtype, layout_tiled, ImmutAnyOrigin
+            ](inp2)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
             ctx.enqueue_function[matmul_tiled, matmul_tiled](
                 out_tensor_tiled,

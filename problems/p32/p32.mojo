@@ -1,9 +1,13 @@
 from std.gpu import thread_idx, block_dim, block_idx, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_almost_equal
 from std.benchmark import Bench, BenchConfig, Bencher, BenchId, keep
@@ -18,9 +22,17 @@ comptime layout = row_major[SIZE]()
 comptime LayoutType = type_of(layout)
 
 
+<<<<<<< HEAD
 def no_conflict_kernel(
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
+=======
+def no_conflict_kernel[
+    layout: Layout
+](
+    output: LayoutTensor[dtype, layout, MutAnyOrigin],
+    input: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     size: Int,
 ):
     """Perfect shared memory access - no bank conflicts.
@@ -30,6 +42,7 @@ def no_conflict_kernel(
     """
 
     # Shared memory buffer - each thread loads one element
+<<<<<<< HEAD
     var shared_buf = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[TPB]())
@@ -38,11 +51,23 @@ def no_conflict_kernel(
 <<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
+<<<<<<< HEAD
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var shared_buf = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     # Load from global memory to shared memory - no conflicts
@@ -64,9 +89,17 @@ def no_conflict_kernel(
 
 
 # ANCHOR: two_way_conflict_kernel
+<<<<<<< HEAD
 def two_way_conflict_kernel(
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
+=======
+def two_way_conflict_kernel[
+    layout: Layout
+](
+    output: LayoutTensor[dtype, layout, MutAnyOrigin],
+    input: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     size: Int,
 ):
     """Stride-2 shared memory access - creates 2-way bank conflicts.
@@ -76,6 +109,7 @@ def two_way_conflict_kernel(
     """
 
     # Shared memory buffer - stride-2 access pattern creates conflicts
+<<<<<<< HEAD
     var shared_buf = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[TPB]())
@@ -84,11 +118,23 @@ def two_way_conflict_kernel(
 <<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
+<<<<<<< HEAD
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var shared_buf = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     # CONFLICT: stride-2 access creates 2-way bank conflicts
@@ -120,8 +166,12 @@ def benchmark_no_conflict[test_size: Int](mut b: Bencher) raises:
     @parameter
     @always_inline
     def kernel_workflow(ctx: DeviceContext) raises:
+<<<<<<< HEAD
         comptime layout = row_major[test_size]()
         comptime LayoutType = type_of(layout)
+=======
+        comptime layout = Layout.row_major(test_size)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         var out = ctx.enqueue_create_buffer[dtype](test_size)
         out.enqueue_fill(0)
         var input_buf = ctx.enqueue_create_buffer[dtype](test_size)
@@ -131,9 +181,15 @@ def benchmark_no_conflict[test_size: Int](mut b: Bencher) raises:
             for i in range(test_size):
                 input_host[i] = Scalar[dtype](i + 1)
 
+<<<<<<< HEAD
         var out_tensor = TileTensor(out, layout)
         var input_tensor = TileTensor[mut=False, dtype, LayoutType](
             input_buf, layout
+=======
+        var out_tensor = LayoutTensor[mut=True, dtype, layout](out.unsafe_ptr())
+        var input_tensor = LayoutTensor[mut=False, dtype, layout](
+            input_buf.unsafe_ptr()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         )
 
         comptime kernel = no_conflict_kernel
@@ -157,8 +213,12 @@ def benchmark_two_way_conflict[test_size: Int](mut b: Bencher) raises:
     @parameter
     @always_inline
     def kernel_workflow(ctx: DeviceContext) raises:
+<<<<<<< HEAD
         comptime layout = row_major[test_size]()
         comptime LayoutType = type_of(layout)
+=======
+        comptime layout = Layout.row_major(test_size)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         var out = ctx.enqueue_create_buffer[dtype](test_size)
         out.enqueue_fill(0)
         var input_buf = ctx.enqueue_create_buffer[dtype](test_size)
@@ -168,9 +228,15 @@ def benchmark_two_way_conflict[test_size: Int](mut b: Bencher) raises:
             for i in range(test_size):
                 input_host[i] = Scalar[dtype](i + 1)
 
+<<<<<<< HEAD
         var out_tensor = TileTensor(out, layout)
         var input_tensor = TileTensor[mut=False, dtype, LayoutType](
             input_buf, layout
+=======
+        var out_tensor = LayoutTensor[mut=True, dtype, layout](out.unsafe_ptr())
+        var input_tensor = LayoutTensor[mut=False, dtype, layout](
+            input_buf.unsafe_ptr()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         )
 
         comptime kernel = two_way_conflict_kernel
@@ -200,9 +266,15 @@ def test_no_conflict() raises:
             for i in range(SIZE):
                 input_host[i] = Scalar[dtype](i + 1)
 
+<<<<<<< HEAD
         var out_tensor = TileTensor(out, layout)
         var input_tensor = TileTensor[mut=False, dtype, LayoutType](
             input_buf, layout
+=======
+        var out_tensor = LayoutTensor[mut=True, dtype, layout](out.unsafe_ptr())
+        var input_tensor = LayoutTensor[mut=False, dtype, layout](
+            input_buf.unsafe_ptr()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         )
 
         comptime kernel = no_conflict_kernel
@@ -218,6 +290,7 @@ def test_no_conflict() raises:
             for i in range(min(SIZE, 10)):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = Scalar[dtype]((i + 11) * 2)
 =======
                 var expected = Float32((i + 11) * 2)
@@ -225,6 +298,12 @@ def test_no_conflict() raises:
 =======
                 var expected = Scalar[dtype]((i + 11) * 2)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+                var expected = Scalar[dtype]((i + 11) * 2)
+=======
+                var expected = Float32((i + 11) * 2)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
                 assert_almost_equal(result[i], expected, atol=1e-5)
 
         print("No-conflict kernel test: passed")
@@ -242,9 +321,15 @@ def test_two_way_conflict() raises:
             for i in range(SIZE):
                 input_host[i] = Scalar[dtype](i + 1)
 
+<<<<<<< HEAD
         var out_tensor = TileTensor(out, layout)
         var input_tensor = TileTensor[mut=False, dtype, LayoutType](
             input_buf, layout
+=======
+        var out_tensor = LayoutTensor[mut=True, dtype, layout](out.unsafe_ptr())
+        var input_tensor = LayoutTensor[mut=False, dtype, layout](
+            input_buf.unsafe_ptr()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         )
 
         comptime kernel = two_way_conflict_kernel
@@ -260,6 +345,7 @@ def test_two_way_conflict() raises:
             for i in range(min(SIZE, 10)):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = Scalar[dtype]((i + 11) * 2)
 =======
                 var expected = Float32((i + 11) * 2)
@@ -267,6 +353,12 @@ def test_two_way_conflict() raises:
 =======
                 var expected = Scalar[dtype]((i + 11) * 2)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+                var expected = Scalar[dtype]((i + 11) * 2)
+=======
+                var expected = Float32((i + 11) * 2)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
                 assert_almost_equal(result[i], expected, atol=1e-5)
 
         print("Two-way conflict kernel test: passed")

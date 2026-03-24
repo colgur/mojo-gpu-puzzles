@@ -1,8 +1,12 @@
 from std.gpu import thread_idx, block_idx, block_dim, lane_id
 from std.gpu.host import DeviceContext
 from std.gpu.primitives.warp import shuffle_down, broadcast, WARP_SIZE
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_equal, assert_almost_equal
 
@@ -16,7 +20,11 @@ comptime LayoutType = type_of(layout)
 
 
 def neighbor_difference[
+<<<<<<< HEAD
     size: Int
+=======
+    layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -28,6 +36,7 @@ def neighbor_difference[
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -35,6 +44,12 @@ def neighbor_difference[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var lane = Int(lane_id())
 
     # FILL IN (roughly 7 lines)
@@ -51,7 +66,11 @@ comptime LayoutType_2 = type_of(layout_2)
 
 
 def moving_average_3[
+<<<<<<< HEAD
     size: Int
+=======
+    layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType_2, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType_2, ImmutAnyOrigin],
@@ -63,6 +82,7 @@ def moving_average_3[
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -70,6 +90,12 @@ def moving_average_3[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var lane = Int(lane_id())
 
     # FILL IN (roughly 10 lines)
@@ -80,7 +106,11 @@ def moving_average_3[
 
 # ANCHOR: broadcast_shuffle_coordination
 def broadcast_shuffle_coordination[
+<<<<<<< HEAD
     size: Int
+=======
+    layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -92,6 +122,7 @@ def broadcast_shuffle_coordination[
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -99,6 +130,12 @@ def broadcast_shuffle_coordination[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var lane = Int(lane_id())
     if global_i < size:
         var scale_factor: output.ElementType = 0.0
@@ -111,7 +148,11 @@ def broadcast_shuffle_coordination[
 
 # ANCHOR: basic_broadcast
 def basic_broadcast[
+<<<<<<< HEAD
     size: Int
+=======
+    layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -122,6 +163,7 @@ def basic_broadcast[
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -129,6 +171,12 @@ def basic_broadcast[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var lane = Int(lane_id())
     if global_i < size:
         var broadcast_value: output.ElementType = 0.0
@@ -141,7 +189,11 @@ def basic_broadcast[
 
 # ANCHOR: conditional_broadcast
 def conditional_broadcast[
+<<<<<<< HEAD
     size: Int
+=======
+    layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -152,6 +204,7 @@ def conditional_broadcast[
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -159,6 +212,12 @@ def conditional_broadcast[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var lane = Int(lane_id())
     if global_i < size:
         var decision_value: output.ElementType = 0.0
@@ -188,10 +247,19 @@ def test_neighbor_difference() raises:
             for i in range(SIZE):
                 input_host[i] = Scalar[dtype](i * i)
 
+<<<<<<< HEAD
         var input_tensor = TileTensor[
             mut=False, dtype, LayoutType, ImmutAnyOrigin
         ](input_buf, layout)
         var output_tensor = TileTensor(output_buf, layout)
+=======
+        var input_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](
+            input_buf
+        )
+        var output_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](
+            output_buf
+        )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = neighbor_difference[SIZE]
         ctx.enqueue_function[kernel, kernel](
@@ -234,10 +302,19 @@ def test_moving_average() raises:
             for i in range(1, SIZE_2):
                 input_host[i] = input_host[i - 1] + Scalar[dtype](i + 1)
 
+<<<<<<< HEAD
         var input_tensor = TileTensor[
             mut=False, dtype, LayoutType_2, ImmutAnyOrigin
         ](input_buf, layout_2)
         var output_tensor = TileTensor(output_buf, layout_2)
+=======
+        var input_tensor = LayoutTensor[dtype, layout_2, ImmutAnyOrigin](
+            input_buf
+        )
+        var output_tensor = LayoutTensor[dtype, layout_2, MutAnyOrigin](
+            output_buf
+        )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = moving_average_3[SIZE_2]
         ctx.enqueue_function[kernel, kernel](
@@ -302,10 +379,19 @@ def test_broadcast_shuffle_coordination() raises:
                 else:
                     input_host[i] = Scalar[dtype](((i - 4) % 4) * 2 + 1)
 
+<<<<<<< HEAD
         var input_tensor = TileTensor[
             mut=False, dtype, LayoutType, ImmutAnyOrigin
         ](input_buf, layout)
         var output_tensor = TileTensor(output_buf, layout)
+=======
+        var input_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](
+            input_buf
+        )
+        var output_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](
+            output_buf
+        )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = broadcast_shuffle_coordination[SIZE]
         ctx.enqueue_function[kernel, kernel](
@@ -324,6 +410,7 @@ def test_broadcast_shuffle_coordination() raises:
             # Lane 0 computes scale_factor from first 4 elements in block: (2+4+6+8)/4 = 5.0
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             var expected_scale = Scalar[dtype](5.0)
 =======
             var expected_scale = Float32(5.0)
@@ -331,6 +418,12 @@ def test_broadcast_shuffle_coordination() raises:
 =======
             var expected_scale = Scalar[dtype](5.0)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+            var expected_scale = Scalar[dtype](5.0)
+=======
+            var expected_scale = Float32(5.0)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
             for i in range(SIZE):
                 if i < SIZE - 1:
@@ -362,10 +455,19 @@ def test_basic_broadcast() raises:
             for i in range(SIZE):
                 input_host[i] = Scalar[dtype](i + 1)
 
+<<<<<<< HEAD
         var input_tensor = TileTensor[
             mut=False, dtype, LayoutType, ImmutAnyOrigin
         ](input_buf, layout)
         var output_tensor = TileTensor(output_buf, layout)
+=======
+        var input_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](
+            input_buf
+        )
+        var output_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](
+            output_buf
+        )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = basic_broadcast[SIZE]
         ctx.enqueue_function[kernel, kernel](
@@ -384,6 +486,7 @@ def test_basic_broadcast() raises:
             # Lane 0 computes broadcast_value from first 4 elements: 1+2+3+4 = 10
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             var expected_broadcast = Scalar[dtype](10.0)
 =======
             var expected_broadcast = Float32(10.0)
@@ -391,6 +494,12 @@ def test_basic_broadcast() raises:
 =======
             var expected_broadcast = Scalar[dtype](10.0)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+            var expected_broadcast = Scalar[dtype](10.0)
+=======
+            var expected_broadcast = Float32(10.0)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
             for i in range(SIZE):
                 expected_buf[i] = expected_broadcast + input_host[i]
 
@@ -418,8 +527,11 @@ def test_conditional_broadcast() raises:
             var test_values = [
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
                 Scalar[dtype](3.0),
                 Scalar[dtype](1.0),
                 Scalar[dtype](7.0),
@@ -429,6 +541,9 @@ def test_conditional_broadcast() raises:
                 Scalar[dtype](6.0),
                 Scalar[dtype](8.0),
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 =======
                 Float32(3.0),
                 Float32(1.0),
@@ -438,17 +553,30 @@ def test_conditional_broadcast() raises:
                 Float32(4.0),
                 Float32(6.0),
                 Float32(8.0),
+<<<<<<< HEAD
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
             ]
             for i in range(SIZE):
                 input_host[i] = test_values[i % len(test_values)]
 
+<<<<<<< HEAD
         var input_tensor = TileTensor[
             mut=False, dtype, LayoutType, ImmutAnyOrigin
         ](input_buf, layout)
         var output_tensor = TileTensor(output_buf, layout)
+=======
+        var input_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](
+            input_buf
+        )
+        var output_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](
+            output_buf
+        )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = conditional_broadcast[SIZE]
         ctx.enqueue_function[kernel, kernel](
@@ -467,6 +595,7 @@ def test_conditional_broadcast() raises:
             # Lane 0 finds max of first 8 elements in block: max(3,1,7,2,9,4,6,8) = 9.0, threshold = 4.5
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             var expected_max = Scalar[dtype](9.0)
 =======
             var expected_max = Float32(9.0)
@@ -474,6 +603,12 @@ def test_conditional_broadcast() raises:
 =======
             var expected_max = Scalar[dtype](9.0)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+            var expected_max = Scalar[dtype](9.0)
+=======
+            var expected_max = Float32(9.0)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
             var threshold = expected_max / 2.0
             for i in range(SIZE):
                 if input_host[i] >= threshold:

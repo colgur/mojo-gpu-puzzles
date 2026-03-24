@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 from std.testing import assert_equal
 from std.gpu.host import DeviceContext
+=======
+from std.memory import UnsafePointer, stack_allocation
+from std.gpu import thread_idx, block_idx, block_dim, barrier
+from std.gpu.host import DeviceContext
+from std.gpu.memory import AddressSpace
+from std.testing import assert_equal
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
 # ANCHOR: dot_product
 from std.gpu import thread_idx, block_idx, block_dim, barrier
@@ -21,10 +29,17 @@ comptime OutLayout = type_of(out_layout)
 
 
 def dot_product(
+<<<<<<< HEAD
     output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
     b: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
     size: Int,
+=======
+    output: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    a: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    b: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    size: UInt,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ):
     # FILL ME IN (roughly 13 lines)
     ...

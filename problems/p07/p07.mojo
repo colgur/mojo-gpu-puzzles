@@ -1,7 +1,13 @@
+<<<<<<< HEAD
 from std.gpu import thread_idx, block_idx, block_dim
 from std.gpu.host import DeviceContext
 from layout import TileTensor
 from layout.tile_layout import row_major
+=======
+from std.memory import UnsafePointer
+from std.gpu import thread_idx, block_idx, block_dim
+from std.gpu.host import DeviceContext
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.testing import assert_equal
 
 # ANCHOR: add_10_blocks_2d
@@ -16,9 +22,15 @@ comptime ALayout = type_of(a_layout)
 
 
 def add_10_blocks_2d(
+<<<<<<< HEAD
     output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, ALayout, ImmutAnyOrigin],
     size: Int,
+=======
+    output: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    a: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+    size: UInt,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ):
     var row = block_dim.y * block_idx.y + thread_idx.y
     var col = block_dim.x * block_idx.x + thread_idx.x
@@ -30,6 +42,7 @@ def add_10_blocks_2d(
 
 def main() raises:
     with DeviceContext() as ctx:
+<<<<<<< HEAD
         var out_buf = ctx.enqueue_create_buffer[dtype](SIZE * SIZE)
         out_buf.enqueue_fill(0)
         var out_tensor = TileTensor(out_buf, out_layout)
@@ -37,6 +50,12 @@ def main() raises:
         var expected_buf = ctx.enqueue_create_host_buffer[dtype](SIZE * SIZE)
         expected_buf.enqueue_fill(1)
 
+=======
+        var out = ctx.enqueue_create_buffer[dtype](SIZE * SIZE)
+        out.enqueue_fill(0)
+        var expected = ctx.enqueue_create_host_buffer[dtype](SIZE * SIZE)
+        expected.enqueue_fill(1)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         var a = ctx.enqueue_create_buffer[dtype](SIZE * SIZE)
         a.enqueue_fill(1)
 
@@ -46,6 +65,9 @@ def main() raises:
                     var k = j * SIZE + i
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
                     a_host[k] = Scalar[dtype](k)
 <<<<<<< HEAD
                     expected[k] = Scalar[dtype](k + 10)
@@ -61,7 +83,14 @@ def main() raises:
                     expected_buf[k] = Scalar[dtype](k + 10)
 
         var a_tensor = TileTensor[mut=False, dtype, ALayout](a, a_layout)
+<<<<<<< HEAD
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+=======
+                    a_host[k] = k
+                    expected[k] = k + 10
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
         ctx.enqueue_function[add_10_blocks_2d, add_10_blocks_2d](
             out_tensor,

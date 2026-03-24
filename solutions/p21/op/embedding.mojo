@@ -1,8 +1,12 @@
 from std.math import ceildiv
 from std.gpu import thread_idx, block_idx, block_dim, grid_dim, barrier
 from std.gpu.host import DeviceContext
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major, TensorLayout
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_equal
 
@@ -11,6 +15,12 @@ comptime THREADS_PER_BLOCK = 256
 
 # ANCHOR: embedding_kernel_coalesced_solution
 def embedding_kernel_coalesced[
+<<<<<<< HEAD
+=======
+    indices_layout: Layout,
+    weights_layout: Layout,
+    out_layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     batch_size: Int,
     seq_len: Int,
     vocab_size: Int,
@@ -36,6 +46,7 @@ def embedding_kernel_coalesced[
     # Simple 1D indexing - each thread = one output element
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_idx = block_idx.x * block_dim.x + thread_idx.x
 =======
     var global_idx = Int(block_idx.x * block_dim.x + thread_idx.x)
@@ -43,6 +54,12 @@ def embedding_kernel_coalesced[
 =======
     var global_idx = block_idx.x * block_dim.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_idx = block_idx.x * block_dim.x + thread_idx.x
+=======
+    var global_idx = Int(block_idx.x * block_dim.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var total_elements = batch_size * seq_len * embed_dim
 
     if global_idx >= total_elements:
@@ -59,7 +76,11 @@ def embedding_kernel_coalesced[
     var embed_idx = remaining % embed_dim
 
     # Get token index
+<<<<<<< HEAD
     var token_idx_val = Int(indices_lt[batch_idx, seq_idx])
+=======
+    var token_idx_val = Int(indices[batch_idx, seq_idx])
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     # Simple, correct assignment
     if token_idx_val >= 0 and token_idx_val < vocab_size:
@@ -75,6 +96,12 @@ def embedding_kernel_coalesced[
 
 # ANCHOR: embedding_kernel_2d_solution
 def embedding_kernel_2d[
+<<<<<<< HEAD
+=======
+    indices_layout: Layout,
+    weights_layout: Layout,
+    out_layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     batch_size: Int,
     seq_len: Int,
     vocab_size: Int,
@@ -100,16 +127,23 @@ def embedding_kernel_2d[
     # 2D grid indexing
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var batch_seq_idx = block_idx.x * block_dim.x + thread_idx.x
     var embed_idx = block_idx.y * block_dim.y + thread_idx.y
 =======
     var batch_seq_idx = Int(block_idx.x * block_dim.x + thread_idx.x)
     var embed_idx = Int(block_idx.y * block_dim.y + thread_idx.y)
+<<<<<<< HEAD
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var batch_seq_idx = block_idx.x * block_dim.x + thread_idx.x
     var embed_idx = block_idx.y * block_dim.y + thread_idx.y
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     var total_positions = batch_size * seq_len
 
@@ -126,7 +160,11 @@ def embedding_kernel_2d[
     var seq_idx = batch_seq_idx % seq_len
 
     # Get token index
+<<<<<<< HEAD
     var token_idx_val = Int(indices_lt[batch_idx, seq_idx])
+=======
+    var token_idx_val = Int(indices[batch_idx, seq_idx])
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     # Assignment with 2D grid pattern
     if token_idx_val >= 0 and token_idx_val < vocab_size:
@@ -168,12 +206,18 @@ struct EmbeddingCustomOp:
         ],  # [vocab_size, embed_dim]
         ctx: DeviceContextPtr,
     ) raises:
+<<<<<<< HEAD
         comptime out_layout_val = row_major[batch_size, seq_len, embed_dim]()
         comptime OutLayout = type_of(out_layout_val)
         comptime indices_layout_val = row_major[batch_size, seq_len]()
         comptime IndicesLayout = type_of(indices_layout_val)
         comptime weights_layout_val = row_major[vocab_size, embed_dim]()
         comptime WeightsLayout = type_of(weights_layout_val)
+=======
+        var output_tensor = output.to_layout_tensor()
+        var indices_tensor = indices.to_layout_tensor()
+        var weights_tensor = weights.to_layout_tensor()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         var output_tensor = TileTensor[
             mut=True, output.dtype, OutLayout, MutAnyOrigin
@@ -263,12 +307,18 @@ struct Embedding2DCustomOp:
         ],  # [vocab_size, embed_dim]
         ctx: DeviceContextPtr,
     ) raises:
+<<<<<<< HEAD
         comptime out_layout_val = row_major[batch_size, seq_len, embed_dim]()
         comptime OutLayout = type_of(out_layout_val)
         comptime indices_layout_val = row_major[batch_size, seq_len]()
         comptime IndicesLayout = type_of(indices_layout_val)
         comptime weights_layout_val = row_major[vocab_size, embed_dim]()
         comptime WeightsLayout = type_of(weights_layout_val)
+=======
+        var output_tensor = output.to_layout_tensor()
+        var indices_tensor = indices.to_layout_tensor()
+        var weights_tensor = weights.to_layout_tensor()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         var output_tensor = TileTensor[
             mut=True, output.dtype, OutLayout, MutAnyOrigin

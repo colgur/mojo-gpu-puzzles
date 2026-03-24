@@ -1,8 +1,12 @@
 from std.gpu import thread_idx, block_idx, block_dim, lane_id
 from std.gpu.host import DeviceContext
 from std.gpu.primitives.warp import shuffle_xor, prefix_sum, WARP_SIZE
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_equal, assert_almost_equal
 
@@ -16,7 +20,11 @@ comptime LayoutType = type_of(layout)
 
 
 def butterfly_pair_swap[
+<<<<<<< HEAD
     size: Int
+=======
+    layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -29,6 +37,7 @@ def butterfly_pair_swap[
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -36,6 +45,12 @@ def butterfly_pair_swap[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     # FILL ME IN (4 lines)
 
@@ -45,7 +60,11 @@ def butterfly_pair_swap[
 
 # ANCHOR: butterfly_parallel_max
 def butterfly_parallel_max[
+<<<<<<< HEAD
     size: Int
+=======
+    layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -59,6 +78,7 @@ def butterfly_parallel_max[
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -66,6 +86,12 @@ def butterfly_parallel_max[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     # FILL ME IN (roughly 7 lines)
 
@@ -82,7 +108,11 @@ comptime LayoutType_2 = type_of(layout_2)
 
 
 def butterfly_conditional_max[
+<<<<<<< HEAD
     size: Int
+=======
+    layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType_2, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType_2, ImmutAnyOrigin],
@@ -94,6 +124,7 @@ def butterfly_conditional_max[
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -101,6 +132,12 @@ def butterfly_conditional_max[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var lane = lane_id()
 
     if global_i < size:
@@ -115,7 +152,11 @@ def butterfly_conditional_max[
 
 # ANCHOR: warp_inclusive_prefix_sum
 def warp_inclusive_prefix_sum[
+<<<<<<< HEAD
     size: Int
+=======
+    layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -142,6 +183,7 @@ def warp_inclusive_prefix_sum[
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -149,6 +191,12 @@ def warp_inclusive_prefix_sum[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     # FILL ME IN (roughly 4 lines)
 
@@ -158,7 +206,11 @@ def warp_inclusive_prefix_sum[
 
 # ANCHOR: warp_partition
 def warp_partition[
+<<<<<<< HEAD
     size: Int
+=======
+    layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     input: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -182,6 +234,7 @@ def warp_partition[
     """
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -189,6 +242,12 @@ def warp_partition[
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     if global_i < size:
         var current_val = input[global_i]
@@ -210,10 +269,19 @@ def test_butterfly_pair_swap() raises:
             for i in range(SIZE):
                 input_host[i] = Scalar[dtype](i)
 
+<<<<<<< HEAD
         var input_tensor = TileTensor[
             mut=False, dtype, LayoutType, ImmutAnyOrigin
         ](input_buf, layout)
         var output_tensor = TileTensor(output_buf, layout)
+=======
+        var input_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](
+            input_buf
+        )
+        var output_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](
+            output_buf
+        )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = butterfly_pair_swap[SIZE]
         ctx.enqueue_function[kernel, kernel](
@@ -259,10 +327,19 @@ def test_butterfly_parallel_max() raises:
             # Make sure we have a clear maximum
             input_host[SIZE - 1] = 1000.0
 
+<<<<<<< HEAD
         var input_tensor = TileTensor[
             mut=False, dtype, LayoutType, ImmutAnyOrigin
         ](input_buf, layout)
         var output_tensor = TileTensor(output_buf, layout)
+=======
+        var input_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](
+            input_buf
+        )
+        var output_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](
+            output_buf
+        )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = butterfly_parallel_max[SIZE]
         ctx.enqueue_function[kernel, kernel](
@@ -301,6 +378,7 @@ def test_butterfly_conditional_max() raises:
                     var values = [3, 1, 7, 2, 9, 4, 8, 5, 6]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     input_host[i] = Scalar[dtype](values[i])
 =======
                     input_host[i] = values[i]
@@ -308,13 +386,28 @@ def test_butterfly_conditional_max() raises:
 =======
                     input_host[i] = Scalar[dtype](values[i])
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+                    input_host[i] = Scalar[dtype](values[i])
+=======
+                    input_host[i] = values[i]
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
                 else:
                     input_host[i] = Scalar[dtype](i % 10)
 
+<<<<<<< HEAD
         var input_tensor = TileTensor[
             mut=False, dtype, LayoutType_2, ImmutAnyOrigin
         ](input_buf, layout_2)
         var output_tensor = TileTensor(output_buf, layout_2)
+=======
+        var input_tensor = LayoutTensor[dtype, layout_2, ImmutAnyOrigin](
+            input_buf
+        )
+        var output_tensor = LayoutTensor[dtype, layout_2, MutAnyOrigin](
+            output_buf
+        )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = butterfly_conditional_max[SIZE_2]
         ctx.enqueue_function[kernel, kernel](
@@ -369,10 +462,19 @@ def test_warp_inclusive_prefix_sum() raises:
             for i in range(SIZE):
                 input_host[i] = Scalar[dtype](i + 1)
 
+<<<<<<< HEAD
         var input_tensor = TileTensor[
             mut=False, dtype, LayoutType, ImmutAnyOrigin
         ](input_buf, layout)
         var output_tensor = TileTensor(output_buf, layout)
+=======
+        var input_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](
+            input_buf
+        )
+        var output_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](
+            output_buf
+        )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = warp_inclusive_prefix_sum[SIZE]
         ctx.enqueue_function[kernel, kernel](
@@ -411,6 +513,7 @@ def test_warp_partition() raises:
         # Create test data: mix of values above and below pivot
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         var pivot_value = Scalar[dtype](5.0)
 =======
         var pivot_value = Float32(5.0)
@@ -418,6 +521,12 @@ def test_warp_partition() raises:
 =======
         var pivot_value = Scalar[dtype](5.0)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+        var pivot_value = Scalar[dtype](5.0)
+=======
+        var pivot_value = Float32(5.0)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
         with input_buf.map_to_host() as input_host:
             # Create: [3, 7, 1, 8, 2, 9, 4, 6, ...]
             var test_values = [
@@ -441,10 +550,19 @@ def test_warp_partition() raises:
             for i in range(SIZE):
                 input_host[i] = Scalar[dtype](test_values[i % len(test_values)])
 
+<<<<<<< HEAD
         var input_tensor = TileTensor[
             mut=False, dtype, LayoutType, ImmutAnyOrigin
         ](input_buf, layout)
         var output_tensor = TileTensor(output_buf, layout)
+=======
+        var input_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](
+            input_buf
+        )
+        var output_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](
+            output_buf
+        )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = warp_partition[SIZE]
         ctx.enqueue_function[kernel, kernel](

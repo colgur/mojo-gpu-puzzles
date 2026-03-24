@@ -1,9 +1,13 @@
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_equal
 
@@ -22,6 +26,7 @@ comptime conv_layout = row_major[CONV]()
 comptime ConvLayout = type_of(conv_layout)
 
 
+<<<<<<< HEAD
 def conv_1d_simple(
     output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, InLayout, ImmutAnyOrigin],
@@ -32,11 +37,24 @@ def conv_1d_simple(
 <<<<<<< HEAD
     var local_i = thread_idx.x
 =======
+<<<<<<< HEAD
     var local_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var local_i = thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+def conv_1d_simple[
+    in_layout: Layout, out_layout: Layout, conv_layout: Layout
+](
+    output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
+    b: LayoutTensor[dtype, conv_layout, ImmutAnyOrigin],
+):
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = Int(thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     # FILL ME IN (roughly 14 lines)
 
 
@@ -55,6 +73,7 @@ comptime conv_2_layout = row_major[CONV_2]()
 comptime Conv2Layout = type_of(conv_2_layout)
 
 
+<<<<<<< HEAD
 def conv_1d_block_boundary(
     output: TileTensor[mut=True, dtype, Out2Layout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, In2Layout, ImmutAnyOrigin],
@@ -65,6 +84,7 @@ def conv_1d_block_boundary(
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
+<<<<<<< HEAD
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
@@ -72,6 +92,18 @@ def conv_1d_block_boundary(
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+def conv_1d_block_boundary[
+    in_layout: Layout, out_layout: Layout, conv_layout: Layout, dtype: DType
+](
+    output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
+    b: LayoutTensor[dtype, conv_layout, ImmutAnyOrigin],
+):
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+    var local_i = Int(thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     # FILL ME IN (roughly 18 lines)
 
 

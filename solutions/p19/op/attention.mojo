@@ -1,10 +1,16 @@
 from std.memory import UnsafePointer
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.host import DeviceContext, HostBuffer, DeviceBuffer
+<<<<<<< HEAD
 from std.gpu.memory import AddressSpace
 from layout import TileTensor
 from layout.tile_layout import row_major, TensorLayout
 from layout.tile_tensor import stack_allocation
+=======
+from std.gpu.memory import AddressSpace, async_copy_wait_all
+from layout import Layout, LayoutTensor
+from layout.layout_tensor import copy_dram_to_sram_async
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.math import exp
 from std.bit import log2_ceil
 from std.utils.numerics import max_finite, min_finite
@@ -30,6 +36,12 @@ comptime SOFTMAX_BLOCK_DIM_X = 1 << log2_ceil(SEQ_LEN)
 # of size (MATMUL_BLOCK_DIM_XY x MATMUL_BLOCK_DIM_XY) with each thread loading one element
 # from a and b, and writing one element to output.
 def matmul_idiomatic_tiled[
+<<<<<<< HEAD
+=======
+    a_layout: Layout,
+    b_layout: Layout,
+    out_layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     rows: Int,
     cols: Int,
     inner: Int,
@@ -45,8 +57,11 @@ def matmul_idiomatic_tiled[
     """Updated idiomatic tiled matrix multiplication from p16."""
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var local_row = thread_idx.y
     var local_col = thread_idx.x
     var tiled_row = block_idx.y * MATMUL_BLOCK_DIM_XY + local_row
@@ -74,6 +89,32 @@ def matmul_idiomatic_tiled[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     )
     comptime shared_layout = row_major[
+=======
+    var local_row = Int(thread_idx.y)
+    var local_col = Int(thread_idx.x)
+    var tiled_row = Int(block_idx.y) * MATMUL_BLOCK_DIM_XY + local_row
+    var tiled_col = Int(block_idx.x) * MATMUL_BLOCK_DIM_XY + local_col
+
+    # Get the tile of the output matrix that this thread block is responsible for
+    var out_tile = output.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
+        Int(block_idx.y), Int(block_idx.x)
+    )
+    var a_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var b_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var acc: output.element_type = 0
+
+    comptime load_a_layout = Layout.row_major(
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY
     ]()
     var a_shared = stack_allocation[
@@ -84,16 +125,20 @@ def matmul_idiomatic_tiled[
     ](shared_layout)
     var acc: output.ElementType = 0
 
+<<<<<<< HEAD
     var a_lt = a.to_layout_tensor()
     var b_lt = b.to_layout_tensor()
     var out_tile_lt = out_tile.to_layout_tensor()
     var a_shared_lt = a_shared.to_layout_tensor()
     var b_shared_lt = b_shared.to_layout_tensor()
 
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     comptime for idx in range(
         (inner + MATMUL_BLOCK_DIM_XY - 1) // MATMUL_BLOCK_DIM_XY
     ):
         # Get tiles from A and B matrices
+<<<<<<< HEAD
 <<<<<<< HEAD
         var a_tile = a.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
 <<<<<<< HEAD
@@ -116,11 +161,24 @@ def matmul_idiomatic_tiled[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
         )
 =======
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
         var a_tile_row_start = block_idx.y * MATMUL_BLOCK_DIM_XY
         var a_tile_col_start = idx * MATMUL_BLOCK_DIM_XY
         var b_tile_row_start = idx * MATMUL_BLOCK_DIM_XY
         var b_tile_col_start = block_idx.x * MATMUL_BLOCK_DIM_XY
+<<<<<<< HEAD
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+=======
+        var a_tile = a.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
+            Int(block_idx.y), idx
+        )
+        var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
+            idx, Int(block_idx.x)
+        )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
         # Synchronously load tiles to shared memory - each thread loads one element
         var a_global_row = a_tile_row_start + local_row
@@ -140,6 +198,7 @@ def matmul_idiomatic_tiled[
         barrier()
 
         # Compute partial matrix multiplication for this tile
+<<<<<<< HEAD
         comptime k_max = min(
             MATMUL_BLOCK_DIM_XY, inner - idx * MATMUL_BLOCK_DIM_XY
         )
@@ -148,6 +207,16 @@ def matmul_idiomatic_tiled[
                 acc += rebind[Scalar[dtype]](
                     a_shared_lt[local_row, k]
                 ) * rebind[Scalar[dtype]](b_shared_lt[k, local_col])
+=======
+        comptime for k in range(MATMUL_BLOCK_DIM_XY):
+            if (
+                tiled_row < rows and tiled_col < cols
+            ):  # Only perform calculation for valid outputs
+                if k < a_tile.dim(
+                    1
+                ):  # Only perform calculation on valid inputs
+                    acc += a_shared[local_row, k] * b_shared[k, local_col]
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         barrier()
 
@@ -158,6 +227,11 @@ def matmul_idiomatic_tiled[
 
 # ANCHOR: transpose_kernel_solution
 def transpose_kernel[
+<<<<<<< HEAD
+=======
+    layout_in: Layout,  # Layout for input matrix (seq_len, d)
+    layout_out: Layout,  # Layout for output matrix (d, seq_len)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     rows: Int,
     cols: Int,
     OutLayout: TensorLayout,
@@ -168,6 +242,7 @@ def transpose_kernel[
     inp: TileTensor[mut=True, dtype, InLayout, MutAnyOrigin],
 ):
     """Transpose matrix using shared memory tiling for coalesced access."""
+<<<<<<< HEAD
     comptime shared_layout = row_major[
         TRANSPOSE_BLOCK_DIM_XY, TRANSPOSE_BLOCK_DIM_XY
     ]()
@@ -200,6 +275,20 @@ def transpose_kernel[
     var inp_lt = inp.to_layout_tensor()
     var output_lt = output.to_layout_tensor()
     var shared_tile_lt = shared_tile.to_layout_tensor()
+=======
+    var shared_tile = LayoutTensor[
+        dtype,
+        Layout.row_major(TRANSPOSE_BLOCK_DIM_XY, TRANSPOSE_BLOCK_DIM_XY),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+
+    var local_row = Int(thread_idx.y)
+    var local_col = Int(thread_idx.x)
+
+    var global_row = Int(block_idx.y) * TRANSPOSE_BLOCK_DIM_XY + local_row
+    var global_col = Int(block_idx.x) * TRANSPOSE_BLOCK_DIM_XY + local_col
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     if global_row < rows and global_col < cols:
         shared_tile_lt[local_row, local_col] = inp_lt[global_row, global_col]
@@ -208,16 +297,23 @@ def transpose_kernel[
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var out_row = block_idx.x * TRANSPOSE_BLOCK_DIM_XY + local_row
     var out_col = block_idx.y * TRANSPOSE_BLOCK_DIM_XY + local_col
 =======
     var out_row = Int(block_idx.x) * TRANSPOSE_BLOCK_DIM_XY + local_row
     var out_col = Int(block_idx.y) * TRANSPOSE_BLOCK_DIM_XY + local_col
+<<<<<<< HEAD
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var out_row = block_idx.x * TRANSPOSE_BLOCK_DIM_XY + local_row
     var out_col = block_idx.y * TRANSPOSE_BLOCK_DIM_XY + local_col
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     # Store data from shared memory to global memory (coalesced write)
     # Note: we transpose the shared memory access pattern
@@ -230,6 +326,10 @@ def transpose_kernel[
 
 # Apply softmax to attention scores taken from p16
 def softmax_gpu_kernel[
+<<<<<<< HEAD
+=======
+    layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     input_size: Int,
     LayoutType: TensorLayout,
     dtype: DType = DType.float32,
@@ -240,6 +340,7 @@ def softmax_gpu_kernel[
     comptime assert (
         dtype.is_floating_point()
     ), "dtype must be a floating-point type"
+<<<<<<< HEAD
 <<<<<<< HEAD
     var shared_max = LayoutTensor[
         dtype,
@@ -263,6 +364,8 @@ def softmax_gpu_kernel[
     var global_i = thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     comptime softmax_layout = row_major[SOFTMAX_BLOCK_DIM_X]()
     var shared_max = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
@@ -273,7 +376,25 @@ def softmax_gpu_kernel[
     var global_i = thread_idx.x
     var input_lt = input.to_layout_tensor()
     var output_lt = output.to_layout_tensor()
+<<<<<<< HEAD
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+=======
+    var shared_max = LayoutTensor[
+        dtype,
+        Layout.row_major(SOFTMAX_BLOCK_DIM_X),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var shared_sum = LayoutTensor[
+        dtype,
+        Layout.row_major(SOFTMAX_BLOCK_DIM_X),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var global_i = Int(thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     # Initialize out-of-bounds (shared_max[local_i], global_i >= input_size) shared memory addresses to the minimum
     # finite value for dtype, ensuring that if these elements are accessed in the parallel max reduction below they
@@ -323,6 +444,13 @@ def softmax_gpu_kernel[
 
 # CPU implementation for vector attention
 def attention_cpu_kernel[
+<<<<<<< HEAD
+=======
+    layout_q: Layout,
+    layout_k: Layout,
+    layout_v: Layout,
+    layout_out: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     seq_len: Int,
     d: Int,
     OutLayout: TensorLayout,
@@ -387,6 +515,7 @@ struct AttentionCustomOp:
         d: Int,
         dtype: DType = DType.float32,
     ](
+<<<<<<< HEAD
         output: OutputTensor[
             dtype=dtype, rank=1, static_spec=_
         ],  # Output vector (d,)
@@ -397,6 +526,12 @@ struct AttentionCustomOp:
         v: InputTensor[
             dtype=dtype, rank=2, static_spec=_
         ],  # Value matrix (seq_len, d)
+=======
+        output: OutputTensor[rank=1, static_spec=_],  # Output vector (d,)
+        q: InputTensor[rank=1, static_spec=_],  # Query vector (d,)
+        k: InputTensor[rank=2, static_spec=_],  # Key matrix (seq_len, d)
+        v: InputTensor[rank=2, static_spec=_],  # Value matrix (seq_len, d)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         ctx: DeviceContextPtr,
     ) raises:
         # Define layouts
@@ -480,12 +615,20 @@ struct AttentionCustomOp:
                 seq_len
             )  # Reused for scores and weights
 
+<<<<<<< HEAD
             var k_t = TileTensor(k_t_buf, layout_k_t)
+=======
+            var k_t = LayoutTensor[dtype, layout_k_t, MutAnyOrigin](k_t_buf)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
             # ANCHOR: attention_orchestration_solution
 
             # Step 1: Reshape Q from (d,) to (1, d) - no buffer needed
+<<<<<<< HEAD
             var q_2d = q_tensor.reshape(layout_q_2d)
+=======
+            var q_2d = q_tensor.reshape[layout_q_2d]()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
             # Step 2: Transpose K from (seq_len, d) to K^T (d, seq_len)\
             comptime kernel = transpose_kernel[
@@ -501,7 +644,13 @@ struct AttentionCustomOp:
             # Step 3: Compute attention scores using matmul: Q @ K^T = (1, d) @ (d, seq_len) -> (1, seq_len)
             # This computes Q · K^T[i] = Q · K[i] for each column i of K^T (which is row i of K)
             # Reuse scores_weights_buf as (1, seq_len) for scores
+<<<<<<< HEAD
             var scores_2d = TileTensor(scores_weights_buf, layout_scores_2d)
+=======
+            var scores_2d = LayoutTensor[dtype, layout_scores_2d, MutAnyOrigin](
+                scores_weights_buf
+            )
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
             comptime kernel2 = matmul_idiomatic_tiled[
                 1,
                 seq_len,
@@ -520,7 +669,11 @@ struct AttentionCustomOp:
             )
 
             # Step 4: Reshape scores from (1, seq_len) to (seq_len,) for softmax
+<<<<<<< HEAD
             var weights = scores_2d.reshape(layout_scores)
+=======
+            var weights = scores_2d.reshape[layout_scores]()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
             # Step 5: Apply softmax to get attention weights (in-place)
             comptime ScoresLayout = type_of(layout_scores)
@@ -540,11 +693,19 @@ struct AttentionCustomOp:
             )
 
             # Step 6: Reshape weights from (seq_len,) to (1, seq_len) for final matmul
+<<<<<<< HEAD
             var weights_2d = weights.reshape(layout_weights_2d)
 
             # Step 7: Compute final result using matmul: weights @ V = (1, seq_len) @ (seq_len, d) -> (1, d)
             # Reuse out_tensor reshaped as (1, d) for result
             var result_2d = output_tensor.reshape(layout_result_2d)
+=======
+            var weights_2d = weights.reshape[layout_weights_2d]()
+
+            # Step 7: Compute final result using matmul: weights @ V = (1, seq_len) @ (seq_len, d) -> (1, d)
+            # Reuse out_tensor reshaped as (1, d) for result
+            var result_2d = output_tensor.reshape[layout_result_2d]()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
             comptime kernel4 = matmul_idiomatic_tiled[
                 1,
                 d,

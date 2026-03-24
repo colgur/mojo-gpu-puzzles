@@ -289,8 +289,13 @@ if thread_id < SIZE - 1:    # Not all threads enter
 **The Fix**: Move the barrier outside the conditional block:
 ```mojo
 def collaborative_filter(
+<<<<<<< HEAD
     output: TileTensor[mut=True, dtype, vector_layout],
     a: TileTensor[mut=False, dtype, vector_layout],
+=======
+    output: LayoutTensor[mut=True, dtype, vector_layout],
+    a: LayoutTensor[mut=False, dtype, vector_layout],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ):
     thread_id = thread_idx.x
     shared_workspace = TileTensor[

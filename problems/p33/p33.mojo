@@ -1,9 +1,13 @@
 from std.gpu import thread_idx, block_idx, block_dim, barrier, WARP_SIZE
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace, async_copy_wait_all
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from layout.tensor_core import TensorCore
 from layout.layout_tensor import copy_dram_to_sram_async
 from std.utils import Index
@@ -26,7 +30,11 @@ comptime THREADS_PER_BLOCK_TILED = (TILE_SIZE, TILE_SIZE)
 
 # ANCHOR: matmul_idiomatic_tiled_solution
 def matmul_idiomatic_tiled[
+<<<<<<< HEAD
     size: Int
+=======
+    layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -40,6 +48,9 @@ def matmul_idiomatic_tiled[
     var local_col = thread_idx.x
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var tiled_row = block_idx.y * tile_size_y + local_row
     var tiled_col = block_idx.x * tile_size_x + local_col
 
@@ -81,7 +92,31 @@ def matmul_idiomatic_tiled[
     var b_shared = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[TILE_SIZE, TILE_SIZE]())
+<<<<<<< HEAD
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+=======
+    var tiled_row = Int(block_idx.y * tile_size_y + local_row)
+    var tiled_col = Int(block_idx.x * tile_size_x + local_col)
+
+    # Get the tile of the output matrix that this thread block is responsible for
+    var out_tile = output.tile[TILE_SIZE, TILE_SIZE](
+        Int(block_idx.y), Int(block_idx.x)
+    )
+    var a_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(TILE_SIZE, TILE_SIZE),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var b_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(TILE_SIZE, TILE_SIZE),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     var acc: output.ElementType = 0
 
@@ -94,16 +129,23 @@ def matmul_idiomatic_tiled[
         # Get tiles from A and B matrices
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
         var a_tile = a.tile[TILE_SIZE, TILE_SIZE](block_idx.y, idx)
         var b_tile = b.tile[TILE_SIZE, TILE_SIZE](idx, block_idx.x)
 =======
         var a_tile = a.tile[TILE_SIZE, TILE_SIZE](Int(block_idx.y), idx)
         var b_tile = b.tile[TILE_SIZE, TILE_SIZE](idx, Int(block_idx.x))
+<<<<<<< HEAD
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
         var a_tile = a.tile[TILE_SIZE, TILE_SIZE](block_idx.y, idx)
         var b_tile = b.tile[TILE_SIZE, TILE_SIZE](idx, block_idx.x)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
         # Asynchronously copy tiles to shared memory with consistent orientation
         copy_dram_to_sram_async[
@@ -180,6 +222,7 @@ def tensor_core_matrix_multiplication[
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var warp_id = thread_idx.x // WARP_SIZE
 =======
     var warp_id = Int(thread_idx.x) // WARP_SIZE
@@ -187,6 +230,12 @@ def tensor_core_matrix_multiplication[
 =======
     var warp_id = thread_idx.x // WARP_SIZE
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var warp_id = thread_idx.x // WARP_SIZE
+=======
+    var warp_id = Int(thread_idx.x) // WARP_SIZE
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var warps_in_n = BN // WN
     var warps_in_m = BM // WM
     var warp_y = warp_id // warps_in_n
@@ -196,6 +245,7 @@ def tensor_core_matrix_multiplication[
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var C_block_tile = C.tile[BM, BN](block_idx.y, block_idx.x)
 =======
     var C_block_tile = C.tile[BM, BN](Int(block_idx.y), Int(block_idx.x))
@@ -203,11 +253,18 @@ def tensor_core_matrix_multiplication[
 =======
     var C_block_tile = C.tile[BM, BN](block_idx.y, block_idx.x)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var C_block_tile = C.tile[BM, BN](block_idx.y, block_idx.x)
+=======
+    var C_block_tile = C.tile[BM, BN](Int(block_idx.y), Int(block_idx.x))
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var C_warp_tile = C_block_tile.tile[WM, WN](warp_y, warp_x)
 
     var mma_op = TensorCore[A.dtype, C.dtype, Index(MMA_M, MMA_N, MMA_K)]()
 
     # Shared SRAM tiles (no padding to stay under shared memory limit)
+<<<<<<< HEAD
     var A_sram_tile = stack_allocation[
         dtype=A.dtype, address_space=AddressSpace.SHARED
     ](row_major[BM, BK]())
@@ -219,6 +276,28 @@ def tensor_core_matrix_multiplication[
     var C_warp_accum = stack_allocation[
         dtype=C.dtype, address_space=AddressSpace.GENERIC
     ](row_major[WM, WN]())
+=======
+    var A_sram_tile = LayoutTensor[
+        A.dtype,
+        Layout.row_major(BM, BK),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var B_sram_tile = LayoutTensor[
+        B.dtype,
+        Layout.row_major(BK, BN),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+
+    # One per-warp accumulator tile of shape [WM, WN]
+    var C_warp_accum = LayoutTensor[
+        C.dtype,
+        Layout.row_major(WM, WN),
+        MutAnyOrigin,
+        address_space=AddressSpace.GENERIC,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     # Zero initialize accumulator (only for active warps)
     if warp_is_active:
@@ -232,6 +311,9 @@ def tensor_core_matrix_multiplication[
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
         var A_dram_tile = A.tile[BM, BK](block_idx.y, k_i)
         var B_dram_tile = B.tile[BK, BN](k_i, block_idx.x)
 =======
@@ -245,11 +327,22 @@ def tensor_core_matrix_multiplication[
 
         copy_dram_to_sram_async[
             thread_layout=row_major[4, 8](),
+=======
+        var A_dram_tile = A.tile[BM, BK](Int(block_idx.y), k_i)
+        var B_dram_tile = B.tile[BK, BN](k_i, Int(block_idx.x))
+
+        copy_dram_to_sram_async[
+            thread_layout=Layout.row_major(4, 8),
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
             num_threads=256,
             block_dim_count=BLOCK_DIM_COUNT,
         ](A_sram_tile.vectorize[1, 4](), A_dram_tile.vectorize[1, 4]())
         copy_dram_to_sram_async[
+<<<<<<< HEAD
             thread_layout=row_major[4, 8](),
+=======
+            thread_layout=Layout.row_major(4, 8),
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
             num_threads=256,
             block_dim_count=BLOCK_DIM_COUNT,
         ](B_sram_tile.vectorize[1, 4](), B_dram_tile.vectorize[1, 4]())
@@ -317,12 +410,16 @@ def main() raises:
                     var val = row * SIZE + col
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
                     inp1_host[row * SIZE + col] = Scalar[dtype](val)
                     inp2_host[row * SIZE + col] = Scalar[dtype](2.0) * Scalar[
                         dtype
                     ](val)
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
                     inp1_host[row * SIZE + col] = val
@@ -330,6 +427,12 @@ def main() raises:
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+=======
+                    inp1_host[row * SIZE + col] = val
+                    inp2_host[row * SIZE + col] = Float32(2.0) * val
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
             # Calculate expected CPU result: inp1 @ inp2
             for i in range(SIZE):
@@ -339,6 +442,7 @@ def main() raises:
                             inp1_host[i * SIZE + k] * inp2_host[k * SIZE + j]
                         )
         # Create layout tensors
+<<<<<<< HEAD
         var out_tensor_core_layout = TileTensor(out_tensor_core, layout)
         var a_tensor = TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin](
             inp1, layout
@@ -346,6 +450,13 @@ def main() raises:
         var b_tensor = TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin](
             inp2, layout
         )
+=======
+        var out_tensor_core_layout = LayoutTensor[dtype, layout](
+            out_tensor_core.unsafe_ptr()
+        )
+        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](inp1)
+        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](inp2)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         if mode == "--tensor-core":
             print("\n=== Running ACTUAL Tensor Core Matrix Multiplication ===")

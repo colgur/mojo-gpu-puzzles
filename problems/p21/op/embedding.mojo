@@ -1,8 +1,12 @@
 from std.math import ceildiv
 from std.gpu import thread_idx, block_idx, block_dim, grid_dim, barrier
 from std.gpu.host import DeviceContext
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major, TensorLayout
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_equal
 
@@ -11,6 +15,12 @@ comptime THREADS_PER_BLOCK = 256
 
 
 def embedding_kernel_coalesced[
+<<<<<<< HEAD
+=======
+    indices_layout: Layout,
+    weights_layout: Layout,
+    out_layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     batch_size: Int,
     seq_len: Int,
     vocab_size: Int,
@@ -36,6 +46,7 @@ def embedding_kernel_coalesced[
     # Simple 1D indexing - each thread = one output element
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_idx = block_idx.x * block_dim.x + thread_idx.x
 =======
     var global_idx = Int(block_idx.x * block_dim.x + thread_idx.x)
@@ -43,6 +54,12 @@ def embedding_kernel_coalesced[
 =======
     var global_idx = block_idx.x * block_dim.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var global_idx = block_idx.x * block_dim.x + thread_idx.x
+=======
+    var global_idx = Int(block_idx.x * block_dim.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var total_elements = batch_size * seq_len * embed_dim
 
     if global_idx >= total_elements:
@@ -63,6 +80,12 @@ def embedding_kernel_coalesced[
 
 # ANCHOR: embedding_kernel_2d
 def embedding_kernel_2d[
+<<<<<<< HEAD
+=======
+    indices_layout: Layout,
+    weights_layout: Layout,
+    out_layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     batch_size: Int,
     seq_len: Int,
     vocab_size: Int,
@@ -88,16 +111,23 @@ def embedding_kernel_2d[
     # 2D grid indexing
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var batch_seq_idx = block_idx.x * block_dim.x + thread_idx.x
     var embed_idx = block_idx.y * block_dim.y + thread_idx.y
 =======
     var batch_seq_idx = Int(block_idx.x * block_dim.x + thread_idx.x)
     var embed_idx = Int(block_idx.y * block_dim.y + thread_idx.y)
+<<<<<<< HEAD
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var batch_seq_idx = block_idx.x * block_dim.x + thread_idx.x
     var embed_idx = block_idx.y * block_dim.y + thread_idx.y
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var total_positions = batch_size * seq_len
 
     if batch_seq_idx >= total_positions or embed_idx >= embed_dim:
@@ -147,6 +177,13 @@ struct EmbeddingCustomOp:
         var indices_tensor = indices.to_layout_tensor()
         var weights_tensor = weights.to_layout_tensor()
 
+<<<<<<< HEAD
+=======
+        comptime indices_layout = indices_tensor.layout
+        comptime weights_layout = weights_tensor.layout
+        comptime out_layout = output_tensor.layout
+
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         comptime if target == "gpu":
             var gpu_ctx = ctx.get_device_context()
 
@@ -222,6 +259,13 @@ struct Embedding2DCustomOp:
         var indices_tensor = indices.to_layout_tensor()
         var weights_tensor = weights.to_layout_tensor()
 
+<<<<<<< HEAD
+=======
+        comptime indices_layout = indices_tensor.layout
+        comptime weights_layout = weights_tensor.layout
+        comptime out_layout = output_tensor.layout
+
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         comptime if target == "gpu":
             var gpu_ctx = ctx.get_device_context()
 

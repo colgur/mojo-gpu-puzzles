@@ -2,9 +2,13 @@ from std.memory import UnsafePointer
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.host import DeviceContext, HostBuffer, DeviceBuffer
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.math import exp
 from std.bit import log2_ceil
 from std.utils.numerics import max_finite, min_finite
@@ -20,6 +24,10 @@ comptime BLOCK_DIM_X = 1 << log2_ceil(SIZE)
 
 # ANCHOR: softmax_gpu_kernel_solution
 def softmax_gpu_kernel[
+<<<<<<< HEAD
+=======
+    layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     input_size: Int,
     dtype: DType = DType.float32,
 ](
@@ -29,6 +37,7 @@ def softmax_gpu_kernel[
     comptime assert (
         dtype.is_floating_point()
     ), "dtype must be a floating-point type"
+<<<<<<< HEAD
 <<<<<<< HEAD
     var shared_max = LayoutTensor[
         dtype,
@@ -45,6 +54,8 @@ def softmax_gpu_kernel[
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var shared_max = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[BLOCK_DIM_X]())
@@ -54,11 +65,28 @@ def softmax_gpu_kernel[
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
     var global_i = thread_idx.x
 =======
+<<<<<<< HEAD
     var global_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var global_i = thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var shared_max = LayoutTensor[
+        dtype,
+        Layout.row_major(BLOCK_DIM_X),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var shared_sum = LayoutTensor[
+        dtype,
+        Layout.row_major(BLOCK_DIM_X),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var global_i = Int(thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     # Initialize out-of-bounds (shared_max[local_i], global_i >= input_size) shared memory addresses to the minimum
     # finite value for dtype, ensuring that if these elements are accessed in the parallel max reduction below they
@@ -111,6 +139,10 @@ def softmax_gpu_kernel[
 
 # ANCHOR: softmax_cpu_kernel_solution
 def softmax_cpu_kernel[
+<<<<<<< HEAD
+=======
+    layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     input_size: Int,
     dtype: DType = DType.float32,
 ](
@@ -149,8 +181,13 @@ struct SoftmaxCustomOp:
         input_size: Int,
         dtype: DType = DType.float32,
     ](
+<<<<<<< HEAD
         output: OutputTensor[dtype=dtype, rank=1, static_spec=_],
         input: InputTensor[dtype=dtype, rank=output.rank, static_spec=_],
+=======
+        output: OutputTensor[rank=1, static_spec=_],
+        input: InputTensor[rank=output.rank, static_spec=_],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         ctx: DeviceContextPtr,
     ) raises:
         var output_tensor = TileTensor[

@@ -4,9 +4,13 @@ from std.gpu.host import DeviceContext, HostBuffer, DeviceBuffer
 from std.gpu.primitives.warp import sum as warp_sum, WARP_SIZE
 from std.gpu.memory import AddressSpace
 from std.algorithm.functional import elementwise
+<<<<<<< HEAD
 from layout import TileTensor, LayoutTensor
 from layout.tile_layout import row_major, TensorLayout
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.utils import Index, IndexList
 from std.sys import argv, simd_width_of, align_of
 from std.testing import assert_equal
@@ -36,7 +40,11 @@ comptime OutLayout = type_of(out_layout)
 
 # ANCHOR: traditional_approach_from_p12
 def traditional_dot_product_p12_style[
+<<<<<<< HEAD
     InLayoutT: TensorLayout, OutLayoutT: TensorLayout, size: Int
+=======
+    in_layout: Layout, out_layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, OutLayoutT, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, InLayoutT, MutAnyOrigin],
@@ -45,6 +53,7 @@ def traditional_dot_product_p12_style[
     """
     This is the complex approach from p12_layout_tensor.mojo - kept for comparison.
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
     var shared = LayoutTensor[
         dtype,
@@ -55,6 +64,8 @@ def traditional_dot_product_p12_style[
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var a_lt = a.to_layout_tensor()
     var b_lt = b.to_layout_tensor()
     var out_lt = output.to_layout_tensor()
@@ -65,6 +76,7 @@ def traditional_dot_product_p12_style[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
+<<<<<<< HEAD
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
@@ -72,6 +84,17 @@ def traditional_dot_product_p12_style[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var shared = LayoutTensor[
+        dtype,
+        Layout.row_major(WARP_SIZE),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+    var local_i = Int(thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     if global_i < size:
         shared[local_i] = rebind[Scalar[dtype]](a_lt[global_i]) * rebind[
@@ -98,7 +121,11 @@ def traditional_dot_product_p12_style[
 
 # ANCHOR: simple_warp_kernel_solution
 def simple_warp_dot_product[
+<<<<<<< HEAD
     InLayoutT: TensorLayout, OutLayoutT: TensorLayout, size: Int
+=======
+    in_layout: Layout, out_layout: Layout, size: Int
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, OutLayoutT, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, InLayoutT, MutAnyOrigin],
@@ -107,7 +134,10 @@ def simple_warp_dot_product[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var a_lt = a.to_layout_tensor()
     var b_lt = b.to_layout_tensor()
     var out_lt = output.to_layout_tensor()
@@ -115,10 +145,14 @@ def simple_warp_dot_product[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+<<<<<<< HEAD
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     # Each thread computes one partial product using vectorized approach as values in Mojo are SIMD based
     var partial_product: Scalar[dtype] = 0
@@ -140,8 +174,13 @@ def simple_warp_dot_product[
 
 # ANCHOR: functional_warp_approach_solution
 def functional_warp_dot_product[
+<<<<<<< HEAD
     InLayoutT: TensorLayout,
     OutLayoutT: TensorLayout,
+=======
+    layout: Layout,
+    out_layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     dtype: DType,
     simd_width: Int,
     rank: Int,
@@ -158,19 +197,28 @@ def functional_warp_dot_product[
         simd_width: Int, rank: Int, alignment: Int = align_of[dtype]()
     ](indices: IndexList[rank]) capturing -> None:
         var idx = indices[0]
+<<<<<<< HEAD
         # Convert inside GPU kernel to avoid host-captured LayoutTensor issues
         var a_lt = a.to_layout_tensor()
         var b_lt = b.to_layout_tensor()
         var out_lt = output.to_layout_tensor()
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         # Each thread computes one partial product
         var partial_product: Scalar[dtype] = 0.0
         if idx < size:
+<<<<<<< HEAD
             var a_val = a_lt.load[1](Index(idx))
             var b_val = b_lt.load[1](Index(idx))
             partial_product = rebind[Scalar[dtype]](a_val) * rebind[
                 Scalar[dtype]
             ](b_val)
+=======
+            var a_val = a.load[1](Index(idx))
+            var b_val = b.load[1](Index(idx))
+            partial_product = a_val * b_val
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         else:
             partial_product = 0.0
 
@@ -256,6 +304,7 @@ def benchmark_simple_warp_parameterized[
     rand_int[dtype, test_size](b)
     expected_output[dtype, n_warps](expected, a, b)
 
+<<<<<<< HEAD
     var a_tensor = TileTensor[mut=False, dtype, BenchInLayout](
         a, bench_in_layout
     )
@@ -265,6 +314,11 @@ def benchmark_simple_warp_parameterized[
     var out_tensor = TileTensor[mut=True, dtype, BenchOutLayout](
         out, bench_out_layout
     )
+=======
+    var a_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](a)
+    var b_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](b)
+    var out_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](out)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     @parameter
     @always_inline
@@ -314,6 +368,7 @@ def benchmark_functional_warp_parameterized[
     rand_int[dtype, test_size](b)
     expected_output[dtype, n_warps](expected, a, b)
 
+<<<<<<< HEAD
     var a_tensor = rebind[
         TileTensor[mut=False, dtype, BenchInLayout, ImmutAnyOrigin]
     ](TileTensor[mut=False, dtype, BenchInLayout](a, bench_in_layout))
@@ -323,6 +378,11 @@ def benchmark_functional_warp_parameterized[
     var out_tensor = rebind[
         TileTensor[mut=True, dtype, BenchOutLayout, MutAnyOrigin]
     ](TileTensor[mut=True, dtype, BenchOutLayout](out, bench_out_layout))
+=======
+    var a_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](a)
+    var b_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](b)
+    var out_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](out)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     @parameter
     @always_inline
@@ -366,6 +426,7 @@ def benchmark_traditional_parameterized[
     rand_int[dtype, test_size](b)
     expected_output[dtype, n_warps](expected, a, b)
 
+<<<<<<< HEAD
     var a_tensor = TileTensor[mut=False, dtype, BenchInLayout](
         a, bench_in_layout
     )
@@ -375,6 +436,11 @@ def benchmark_traditional_parameterized[
     var out_tensor = TileTensor[mut=True, dtype, BenchOutLayout](
         out, bench_out_layout
     )
+=======
+    var a_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](a)
+    var b_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](b)
+    var out_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](out)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     @parameter
     @always_inline
@@ -420,6 +486,7 @@ def main() raises:
             var expected = ctx.enqueue_create_host_buffer[dtype](n_warps)
             expected.enqueue_fill(0)
 
+<<<<<<< HEAD
             var out_tensor = rebind[
                 TileTensor[mut=True, dtype, MainOutLayout, MutAnyOrigin]
             ](TileTensor[mut=True, dtype, MainOutLayout](out, main_out_layout))
@@ -429,6 +496,11 @@ def main() raises:
             var b_tensor = rebind[
                 TileTensor[mut=False, dtype, InLayout, ImmutAnyOrigin]
             ](TileTensor[mut=False, dtype, InLayout](b, in_layout))
+=======
+            var out_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](out)
+            var a_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](a)
+            var b_tensor = LayoutTensor[dtype, in_layout, ImmutAnyOrigin](b)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
             with a.map_to_host() as a_host, b.map_to_host() as b_host:
                 for i in range(SIZE):

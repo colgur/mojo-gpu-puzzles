@@ -1,9 +1,13 @@
 from std.gpu import thread_idx, block_dim, block_idx, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_almost_equal
 from std.benchmark import Bench, BenchConfig, Bencher, BenchId, keep
@@ -18,13 +22,22 @@ comptime LayoutType = type_of(layout)
 comptime ALPHA = Scalar[dtype](2.5)  # SAXPY coefficient
 
 
+<<<<<<< HEAD
 def minimal_kernel(
     y: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     x: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
+=======
+def minimal_kernel[
+    layout: Layout
+](
+    y: LayoutTensor[dtype, layout, MutAnyOrigin],
+    x: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     alpha: Float32,
     size: Int,
 ):
     """Minimal SAXPY kernel - simple and register-light for high occupancy."""
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
@@ -34,6 +47,12 @@ def minimal_kernel(
 =======
     var i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var i = block_dim.x * block_idx.x + thread_idx.x
+=======
+    var i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     if i < size:
         # Direct computation: y[i] = alpha * x[i] + y[i]
         # Uses minimal registers (~8), no shared memory
@@ -44,15 +63,24 @@ def minimal_kernel(
 
 
 # ANCHOR: sophisticated_kernel
+<<<<<<< HEAD
 def sophisticated_kernel(
     y: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     x: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
+=======
+def sophisticated_kernel[
+    layout: Layout
+](
+    y: LayoutTensor[dtype, layout, MutAnyOrigin],
+    x: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     alpha: Float32,
     size: Int,
 ):
     """Sophisticated SAXPY kernel - over-engineered with excessive resource usage.
     """
     # Maximum shared memory allocation (close to 48KB limit)
+<<<<<<< HEAD
     var shared_cache = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](
@@ -63,11 +91,23 @@ def sophisticated_kernel(
 <<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
 =======
+<<<<<<< HEAD
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var shared_cache = LayoutTensor[
+        dtype,
+        Layout.row_major(1024 * 12),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()  # 48KB
+
+    var i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     if i < size:
@@ -146,15 +186,24 @@ def sophisticated_kernel(
 
 
 # ANCHOR: balanced_kernel
+<<<<<<< HEAD
 def balanced_kernel(
     y: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     x: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
+=======
+def balanced_kernel[
+    layout: Layout
+](
+    y: LayoutTensor[dtype, layout, MutAnyOrigin],
+    x: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     alpha: Float32,
     size: Int,
 ):
     """Balanced SAXPY kernel - efficient optimization with moderate resources.
     """
     # Reasonable shared memory usage for effective caching (16KB)
+<<<<<<< HEAD
     var shared_cache = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](
@@ -165,11 +214,23 @@ def balanced_kernel(
 <<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
 =======
+<<<<<<< HEAD
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var shared_cache = LayoutTensor[
+        dtype,
+        Layout.row_major(1024 * 4),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()  # 16KB total
+
+    var i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var local_i = thread_idx.x
 
     if i < size:
@@ -214,8 +275,12 @@ def benchmark_minimal_parameterized[test_size: Int](mut b: Bencher) raises:
     @parameter
     @always_inline
     def minimal_workflow(ctx: DeviceContext) raises:
+<<<<<<< HEAD
         comptime layout = row_major[test_size]()
         comptime LayoutType = type_of(layout)
+=======
+        comptime layout = Layout.row_major(test_size)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         var y = ctx.enqueue_create_buffer[dtype](test_size)
         y.enqueue_fill(0)
         var x = ctx.enqueue_create_buffer[dtype](test_size)
@@ -226,8 +291,13 @@ def benchmark_minimal_parameterized[test_size: Int](mut b: Bencher) raises:
                 x_host[i] = Scalar[dtype](i + 1)
                 y_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         var y_tensor = TileTensor(y, layout)
         var x_tensor = TileTensor[mut=False, dtype, LayoutType](x, layout)
+=======
+        var y_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](y)
+        var x_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = minimal_kernel
         ctx.enqueue_function[kernel, kernel](
@@ -253,8 +323,12 @@ def benchmark_sophisticated_parameterized[
     @parameter
     @always_inline
     def sophisticated_workflow(ctx: DeviceContext) raises:
+<<<<<<< HEAD
         comptime layout = row_major[test_size]()
         comptime LayoutType = type_of(layout)
+=======
+        comptime layout = Layout.row_major(test_size)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         var y = ctx.enqueue_create_buffer[dtype](test_size)
         y.enqueue_fill(0)
         var x = ctx.enqueue_create_buffer[dtype](test_size)
@@ -265,8 +339,13 @@ def benchmark_sophisticated_parameterized[
                 x_host[i] = Scalar[dtype](i + 1)
                 y_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         var y_tensor = TileTensor(y, layout)
         var x_tensor = TileTensor[mut=False, dtype, LayoutType](x, layout)
+=======
+        var y_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](y)
+        var x_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = sophisticated_kernel
         ctx.enqueue_function[kernel, kernel](
@@ -290,8 +369,12 @@ def benchmark_balanced_parameterized[test_size: Int](mut b: Bencher) raises:
     @parameter
     @always_inline
     def balanced_workflow(ctx: DeviceContext) raises:
+<<<<<<< HEAD
         comptime layout = row_major[test_size]()
         comptime LayoutType = type_of(layout)
+=======
+        comptime layout = Layout.row_major(test_size)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         var y = ctx.enqueue_create_buffer[dtype](test_size)
         y.enqueue_fill(0)
         var x = ctx.enqueue_create_buffer[dtype](test_size)
@@ -302,8 +385,13 @@ def benchmark_balanced_parameterized[test_size: Int](mut b: Bencher) raises:
                 x_host[i] = Scalar[dtype](i + 1)
                 y_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         var y_tensor = TileTensor(y, layout)
         var x_tensor = TileTensor[mut=False, dtype, LayoutType](x, layout)
+=======
+        var y_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](y)
+        var x_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = balanced_kernel
         ctx.enqueue_function[kernel, kernel](
@@ -336,9 +424,15 @@ def test_minimal() raises:
                 x_host[i] = Scalar[dtype](i + 1)
                 y_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         # Create TileTensors
         var y_tensor = TileTensor(y, layout)
         var x_tensor = TileTensor[mut=False, dtype, LayoutType](x, layout)
+=======
+        # Create LayoutTensors
+        var y_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](y)
+        var x_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = minimal_kernel
         ctx.enqueue_function[kernel, kernel](
@@ -357,6 +451,7 @@ def test_minimal() raises:
             for i in range(10):  # Check first 10
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
@@ -364,6 +459,12 @@ def test_minimal() raises:
 =======
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+                var expected = ALPHA * x_host[i] + Scalar[dtype](
+=======
+                var expected = ALPHA * x_host[i] + Float32(
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]
@@ -387,9 +488,15 @@ def test_sophisticated() raises:
                 x_host[i] = Scalar[dtype](i + 1)
                 y_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         # Create TileTensors
         var y_tensor = TileTensor(y, layout)
         var x_tensor = TileTensor[mut=False, dtype, LayoutType](x, layout)
+=======
+        # Create LayoutTensors
+        var y_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](y)
+        var x_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = sophisticated_kernel
         ctx.enqueue_function[kernel, kernel](
@@ -408,6 +515,7 @@ def test_sophisticated() raises:
             for i in range(10):  # Check first 10
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
@@ -415,6 +523,12 @@ def test_sophisticated() raises:
 =======
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+                var expected = ALPHA * x_host[i] + Scalar[dtype](
+=======
+                var expected = ALPHA * x_host[i] + Float32(
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]
@@ -439,9 +553,15 @@ def test_balanced() raises:
                 x_host[i] = Scalar[dtype](i + 1)
                 y_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         # Create TileTensors
         var y_tensor = TileTensor(y, layout)
         var x_tensor = TileTensor[mut=False, dtype, LayoutType](x, layout)
+=======
+        # Create LayoutTensors
+        var y_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](y)
+        var x_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         comptime kernel = balanced_kernel
         ctx.enqueue_function[kernel, kernel](
@@ -460,6 +580,7 @@ def test_balanced() raises:
             for i in range(10):  # Check first 10
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
@@ -467,6 +588,12 @@ def test_balanced() raises:
 =======
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+                var expected = ALPHA * x_host[i] + Scalar[dtype](
+=======
+                var expected = ALPHA * x_host[i] + Float32(
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]

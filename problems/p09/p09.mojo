@@ -2,9 +2,13 @@ from std.memory import UnsafePointer
 from std.gpu import thread_idx, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.testing import assert_equal
 from std.sys import argv
 
@@ -32,8 +36,13 @@ def add_10(
 
 # ANCHOR: second_crash
 def process_sliding_window(
+<<<<<<< HEAD
     output: TileTensor[mut=True, dtype, VectorLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, VectorLayout, ImmutAnyOrigin],
+=======
+    output: LayoutTensor[dtype, vector_layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, vector_layout, ImmutAnyOrigin],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ):
     var thread_id = thread_idx.x
 
@@ -55,15 +64,29 @@ def process_sliding_window(
 
 # ANCHOR: third_crash
 def collaborative_filter(
+<<<<<<< HEAD
     output: TileTensor[mut=True, dtype, VectorLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, VectorLayout, ImmutAnyOrigin],
+=======
+    output: LayoutTensor[dtype, vector_layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, vector_layout, ImmutAnyOrigin],
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 ):
     var thread_id = thread_idx.x
 
     # Shared memory workspace for collaborative processing
+<<<<<<< HEAD
     var shared_workspace = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[SIZE - 1]())
+=======
+    var shared_workspace = LayoutTensor[
+        dtype,
+        Layout.row_major(SIZE - 1),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     # Phase 1: Initialize shared workspace (all threads participate)
     if thread_id < SIZE - 1:

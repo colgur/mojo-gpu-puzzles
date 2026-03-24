@@ -1,9 +1,13 @@
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_equal
 
@@ -21,6 +25,7 @@ def naive_matmul[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     layout: Layout, size: Int
 =======
     layout: Layout, size: UInt
@@ -31,6 +36,12 @@ def naive_matmul[
 =======
     size: Int
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+    size: Int
+=======
+    layout: Layout, size: UInt
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -56,6 +67,7 @@ def single_block_matmul[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     layout: Layout, size: Int
 =======
     layout: Layout, size: UInt
@@ -66,6 +78,12 @@ def single_block_matmul[
 =======
     size: Int
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+    size: Int
+=======
+    layout: Layout, size: UInt
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -76,12 +94,27 @@ def single_block_matmul[
     var local_row = thread_idx.y
     var local_col = thread_idx.x
 
+<<<<<<< HEAD
     var a_shared = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[TPB, TPB]())
     var b_shared = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[TPB, TPB]())
+=======
+    var a_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB, TPB),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var b_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB, TPB),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     if row < size and col < size:
         a_shared[local_row, local_col] = a[row, col]
@@ -113,6 +146,7 @@ def matmul_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     layout: Layout, size: Int
 =======
     layout: Layout, size: UInt
@@ -123,6 +157,12 @@ def matmul_tiled[
 =======
     size: Int
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+    size: Int
+=======
+    layout: Layout, size: UInt
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutTiledType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutTiledType, ImmutAnyOrigin],
@@ -133,12 +173,27 @@ def matmul_tiled[
     var tiled_row = block_idx.y * TPB + local_row
     var tiled_col = block_idx.x * TPB + local_col
 
+<<<<<<< HEAD
     var a_shared = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[TPB, TPB]())
     var b_shared = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[TPB, TPB]())
+=======
+    var a_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB, TPB),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var b_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB, TPB),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     var acc: output.ElementType = 0
 
@@ -185,6 +240,7 @@ def matmul_idiomatic_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     layout: Layout, size: Int
 =======
     layout: Layout, size: UInt
@@ -195,6 +251,12 @@ def matmul_idiomatic_tiled[
 =======
     size: Int
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+    size: Int
+=======
+    layout: Layout, size: UInt
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 ](
     output: TileTensor[mut=True, dtype, LayoutTiledType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutTiledType, ImmutAnyOrigin],
@@ -208,6 +270,9 @@ def matmul_idiomatic_tiled[
     # Get the tile of the output matrix that this thread block is responsible for
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var out_tile = output.tile[TPB, TPB](block_idx.y, block_idx.x)
 <<<<<<< HEAD
 =======
@@ -235,7 +300,25 @@ def matmul_idiomatic_tiled[
     var b_shared = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[TPB, TPB]())
+<<<<<<< HEAD
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+=======
+    var out_tile = output.tile[TPB, TPB](Int(block_idx.y), Int(block_idx.x))
+    var a_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB, TPB),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var b_shared = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB, TPB),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
     var acc: output.ElementType = 0
 
@@ -254,16 +337,23 @@ def matmul_idiomatic_tiled[
         # Get tiles from A and B matrices
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
         var a_tile = a.tile[TPB, TPB](block_idx.y, Int(idx))
         var b_tile = b.tile[TPB, TPB](Int(idx), block_idx.x)
 =======
         var a_tile = a.tile[TPB, TPB](Int(block_idx.y), Int(idx))
         var b_tile = b.tile[TPB, TPB](Int(idx), Int(block_idx.x))
+<<<<<<< HEAD
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
         var a_tile = a.tile[TPB, TPB](block_idx.y, Int(idx))
         var b_tile = b.tile[TPB, TPB](Int(idx), block_idx.x)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 
         # Asynchronously copy tiles to shared memory with consistent orientation
         copy_dram_to_sram_async[
@@ -326,9 +416,15 @@ def main() raises:
                             inp1_host[i * size + k] * inp2_host[k * size + j]
                         )
 
+<<<<<<< HEAD
         var out_tensor = TileTensor(out, layout)
         var a_tensor = TileTensor[mut=False, dtype, LayoutType](inp1, layout)
         var b_tensor = TileTensor[mut=False, dtype, LayoutType](inp2, layout)
+=======
+        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
+        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](inp1)
+        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](inp2)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         if argv()[1] == "--naive":
             comptime kernel = naive_matmul[SIZE]

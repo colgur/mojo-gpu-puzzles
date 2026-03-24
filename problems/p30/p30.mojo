@@ -1,7 +1,11 @@
 from std.gpu import thread_idx, block_dim, block_idx
 from std.gpu.host import DeviceContext
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_almost_equal
 from std.benchmark import Bench, BenchConfig, Bencher, BenchId, keep
@@ -18,6 +22,7 @@ comptime LayoutType = type_of(layout)
 
 
 # ANCHOR: kernel1
+<<<<<<< HEAD
 def kernel1(
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -28,11 +33,24 @@ def kernel1(
 <<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
 =======
+<<<<<<< HEAD
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+def kernel1[
+    layout: Layout
+](
+    output: LayoutTensor[dtype, layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+    b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+    size: Int,
+):
+    var i = Int(block_dim.x * block_idx.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     if i < size:
         output[i] = a[i] + b[i]
 
@@ -41,6 +59,7 @@ def kernel1(
 
 
 # ANCHOR: kernel2
+<<<<<<< HEAD
 def kernel2(
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -51,11 +70,24 @@ def kernel2(
 <<<<<<< HEAD
     var tid = block_idx.x * block_dim.x + thread_idx.x
 =======
+<<<<<<< HEAD
     var tid = Int(block_idx.x * block_dim.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var tid = block_idx.x * block_dim.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+def kernel2[
+    layout: Layout
+](
+    output: LayoutTensor[dtype, layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+    b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+    size: Int,
+):
+    var tid = Int(block_idx.x * block_dim.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var stride = 512
 
     var i = tid
@@ -68,6 +100,7 @@ def kernel2(
 
 
 # ANCHOR: kernel3
+<<<<<<< HEAD
 def kernel3(
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -78,11 +111,24 @@ def kernel3(
 <<<<<<< HEAD
     var tid = block_idx.x * block_dim.x + thread_idx.x
 =======
+<<<<<<< HEAD
     var tid = Int(block_idx.x * block_dim.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
 =======
     var tid = block_idx.x * block_dim.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+def kernel3[
+    layout: Layout
+](
+    output: LayoutTensor[dtype, layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+    b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+    size: Int,
+):
+    var tid = Int(block_idx.x * block_dim.x + thread_idx.x)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var total_threads = (SIZE // 1024) * 1024
 
     for step in range(0, size, total_threads):
@@ -101,8 +147,12 @@ def benchmark_kernel1_parameterized[test_size: Int](mut b: Bencher) raises:
     @parameter
     @always_inline
     def kernel1_workflow(ctx: DeviceContext) raises:
+<<<<<<< HEAD
         comptime layout = row_major[test_size]()
         comptime LayoutType = type_of(layout)
+=======
+        comptime layout = Layout.row_major(test_size)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         var out = ctx.enqueue_create_buffer[dtype](test_size)
         out.enqueue_fill(0)
         var a = ctx.enqueue_create_buffer[dtype](test_size)
@@ -115,9 +165,15 @@ def benchmark_kernel1_parameterized[test_size: Int](mut b: Bencher) raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         var out_tensor = TileTensor(out, layout)
         var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
         var b_tensor = TileTensor[mut=False, dtype, LayoutType](b_buf, layout)
+=======
+        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
+        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
+        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b_buf)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         ctx.enqueue_function[kernel1, kernel1](
             out_tensor,
@@ -140,8 +196,12 @@ def benchmark_kernel2_parameterized[test_size: Int](mut b: Bencher) raises:
     @parameter
     @always_inline
     def kernel2_workflow(ctx: DeviceContext) raises:
+<<<<<<< HEAD
         comptime layout = row_major[test_size]()
         comptime LayoutType = type_of(layout)
+=======
+        comptime layout = Layout.row_major(test_size)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         var out = ctx.enqueue_create_buffer[dtype](test_size)
         out.enqueue_fill(0)
         var a = ctx.enqueue_create_buffer[dtype](test_size)
@@ -154,9 +214,15 @@ def benchmark_kernel2_parameterized[test_size: Int](mut b: Bencher) raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         var out_tensor = TileTensor(out, layout)
         var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
         var b_tensor = TileTensor[mut=False, dtype, LayoutType](b_buf, layout)
+=======
+        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
+        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
+        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b_buf)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         ctx.enqueue_function[kernel2, kernel2](
             out_tensor,
@@ -179,8 +245,12 @@ def benchmark_kernel3_parameterized[test_size: Int](mut b: Bencher) raises:
     @parameter
     @always_inline
     def kernel3_workflow(ctx: DeviceContext) raises:
+<<<<<<< HEAD
         comptime layout = row_major[test_size]()
         comptime LayoutType = type_of(layout)
+=======
+        comptime layout = Layout.row_major(test_size)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         var out = ctx.enqueue_create_buffer[dtype](test_size)
         out.enqueue_fill(0)
         var a = ctx.enqueue_create_buffer[dtype](test_size)
@@ -193,9 +263,15 @@ def benchmark_kernel3_parameterized[test_size: Int](mut b: Bencher) raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         var out_tensor = TileTensor(out, layout)
         var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
         var b_tensor = TileTensor[mut=False, dtype, LayoutType](b_buf, layout)
+=======
+        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
+        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
+        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b_buf)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         ctx.enqueue_function[kernel3, kernel3](
             out_tensor,
@@ -229,10 +305,17 @@ def test_kernel1() raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         # Create TileTensors
         var out_tensor = TileTensor(out, layout)
         var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
         var b_tensor = TileTensor[mut=False, dtype, LayoutType](b, layout)
+=======
+        # Create LayoutTensors
+        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
+        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
+        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         ctx.enqueue_function[kernel1, kernel1](
             out_tensor,
@@ -272,10 +355,17 @@ def test_kernel2() raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         # Create TileTensors
         var out_tensor = TileTensor(out, layout)
         var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
         var b_tensor = TileTensor[mut=False, dtype, LayoutType](b, layout)
+=======
+        # Create LayoutTensors
+        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
+        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
+        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         ctx.enqueue_function[kernel2, kernel2](
             out_tensor,
@@ -318,10 +408,17 @@ def test_kernel3() raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
+<<<<<<< HEAD
         # Create TileTensors
         var out_tensor = TileTensor(out, layout)
         var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
         var b_tensor = TileTensor[mut=False, dtype, LayoutType](b, layout)
+=======
+        # Create LayoutTensors
+        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
+        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
+        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         ctx.enqueue_function[kernel3, kernel3](
             out_tensor,

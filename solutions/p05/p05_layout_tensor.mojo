@@ -3,7 +3,6 @@ from std.gpu.host import DeviceContext
 from layout import Layout, LayoutTensor
 from std.testing import assert_equal
 
-# ANCHOR: broadcast_add_layout_tensor
 comptime SIZE = 2
 comptime BLOCKS_PER_GRID = 1
 comptime THREADS_PER_BLOCK = (3, 3)
@@ -13,6 +12,7 @@ comptime a_layout = Layout.row_major(1, SIZE)
 comptime b_layout = Layout.row_major(SIZE, 1)
 
 
+# ANCHOR: broadcast_add_layout_tensor_solution
 def broadcast_add[
     out_layout: Layout,
     a_layout: Layout,
@@ -29,8 +29,10 @@ def broadcast_add[
         output[row, col] = a[0, col] + b[row, 0]
 
 
-# ANCHOR_END: broadcast_add_layout_tensor
-def main():
+# ANCHOR_END: broadcast_add_layout_tensor_solution
+
+
+def main() raises:
     with DeviceContext() as ctx:
         var out_buf = ctx.enqueue_create_buffer[dtype](SIZE * SIZE)
         out_buf.enqueue_fill(0)

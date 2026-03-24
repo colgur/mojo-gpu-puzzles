@@ -1,9 +1,13 @@
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.math import log2
 from std.testing import assert_equal
@@ -18,6 +22,7 @@ comptime LayoutType = type_of(layout)
 
 
 # ANCHOR: prefix_sum_simple_solution
+<<<<<<< HEAD
 def prefix_sum_simple(
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -28,11 +33,29 @@ def prefix_sum_simple(
     var shared = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[TPB]())
+=======
+def prefix_sum_simple[
+    layout: Layout
+](
+    output: LayoutTensor[dtype, layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+    size: UInt,
+):
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+    var shared = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     if global_i < size:
         shared[local_i] = a[global_i]
 
     barrier()
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     var offset = 1
@@ -42,6 +65,12 @@ def prefix_sum_simple(
 =======
     var offset = 1
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var offset = 1
+=======
+    var offset = UInt(1)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     for i in range(Int(log2(Scalar[dtype](TPB)))):
         var current_val: output.ElementType = 0
         if local_i >= offset and local_i < size:
@@ -74,6 +103,7 @@ comptime ExtendedLayout = type_of(extended_layout)
 
 
 # Kernel 1: Compute local prefix sums and store block sums in out
+<<<<<<< HEAD
 def prefix_sum_local_phase(
     output: TileTensor[mut=True, dtype, ExtendedLayout, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, Layout2Type, ImmutAnyOrigin],
@@ -84,6 +114,23 @@ def prefix_sum_local_phase(
     var shared = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[TPB]())
+=======
+def prefix_sum_local_phase[
+    out_layout: Layout, in_layout: Layout
+](
+    output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
+    a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
+    size: UInt,
+):
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+    var shared = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
     # Load data into shared memory
     # Example with SIZE_2=15, TPB=8, BLOCKS=2:
@@ -107,6 +154,7 @@ def prefix_sum_local_phase(
     #   Block 1 follows same pattern to get [8,17,27,38,50,63,77,???]
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var offset = 1
 =======
     var offset = UInt(1)
@@ -114,6 +162,12 @@ def prefix_sum_local_phase(
 =======
     var offset = 1
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
+=======
+    var offset = 1
+=======
+    var offset = UInt(1)
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     for i in range(Int(log2(Scalar[dtype](TPB)))):
         var current_val: output.ElementType = 0
         if local_i >= offset and local_i < TPB:
@@ -144,6 +198,7 @@ def prefix_sum_local_phase(
 
 # Kernel 2: Add block sums to their respective blocks
 <<<<<<< HEAD
+<<<<<<< HEAD
 def prefix_sum_block_sum_phase[
     layout: Layout
 <<<<<<< HEAD
@@ -156,11 +211,21 @@ def prefix_sum_block_sum_phase[
 ](output: LayoutTensor[dtype, layout, MutAnyOrigin], size: Int):
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
 def prefix_sum_block_sum_phase(
     output: TileTensor[mut=True, dtype, ExtendedLayout, MutAnyOrigin],
     size: Int,
 ):
+<<<<<<< HEAD
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
+=======
+=======
+def prefix_sum_block_sum_phase[
+    layout: Layout
+](output: LayoutTensor[dtype, layout, MutAnyOrigin], size: UInt):
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 
     # Second pass: add previous block's sum to each element

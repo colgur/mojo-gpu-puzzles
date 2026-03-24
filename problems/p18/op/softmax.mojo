@@ -4,9 +4,13 @@ from std.memory import UnsafePointer
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.host import DeviceContext, HostBuffer, DeviceBuffer
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major
 from layout.tile_tensor import stack_allocation
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.math import exp
 from std.bit import log2_ceil
 from std.utils.numerics import max_finite, min_finite
@@ -21,6 +25,10 @@ comptime BLOCK_DIM_X = 1 << log2_ceil(SIZE)
 
 
 def softmax_gpu_kernel[
+<<<<<<< HEAD
+=======
+    layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     input_size: Int,
     dtype: DType = DType.float32,
 ](
@@ -39,6 +47,10 @@ def softmax_gpu_kernel[
 
 # ANCHOR: softmax_cpu_kernel
 def softmax_cpu_kernel[
+<<<<<<< HEAD
+=======
+    layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     input_size: Int,
     dtype: DType = DType.float32,
 ](

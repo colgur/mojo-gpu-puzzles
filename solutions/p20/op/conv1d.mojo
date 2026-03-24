@@ -2,10 +2,14 @@
 from std.gpu import thread_idx, block_idx, block_dim, barrier
 from std.gpu.host import DeviceContext
 from std.gpu.memory import AddressSpace
+<<<<<<< HEAD
 from layout import TileTensor
 from layout.tile_layout import row_major, TensorLayout
 from layout.tile_tensor import stack_allocation
 from std.utils import Index
+=======
+from layout import Layout, LayoutTensor
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
 from std.sys import argv
 from std.testing import assert_equal
 
@@ -14,6 +18,12 @@ comptime BLOCKS_PER_GRID = (2, 1)
 
 
 def conv1d_kernel[
+<<<<<<< HEAD
+=======
+    in_layout: Layout,
+    out_layout: Layout,
+    conv_layout: Layout,
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     input_size: Int,
     conv_size: Int,
     OutLayout: TensorLayout,
@@ -27,6 +37,9 @@ def conv1d_kernel[
 ):
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 0c6dc9a (Mdoc/fixes (#235))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 <<<<<<< HEAD
@@ -50,6 +63,23 @@ def conv1d_kernel[
     var shared_b = stack_allocation[
         dtype=dtype, address_space=AddressSpace.SHARED
     ](row_major[conv_size]())
+=======
+    var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
+    var local_i = Int(thread_idx.x)
+    # first: need to account for padding
+    var shared_a = LayoutTensor[
+        dtype,
+        Layout.row_major(TPB + conv_size - 1),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+    var shared_b = LayoutTensor[
+        dtype,
+        Layout.row_major(conv_size),
+        MutAnyOrigin,
+        address_space=AddressSpace.SHARED,
+    ].stack_allocation()
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
     if global_i < input_size:
         shared_a[local_i] = rebind[Scalar[dtype]](input_lt[global_i])
 
@@ -102,6 +132,7 @@ struct Conv1DCustomOp:
         # the context is needed for some GPU calls
         ctx: DeviceContextPtr,
     ) raises:
+<<<<<<< HEAD
         comptime out_layout_val = row_major[input_size]()
         comptime OutLayout = type_of(out_layout_val)
         comptime conv_layout_val = row_major[conv_size]()
@@ -117,6 +148,15 @@ struct Conv1DCustomOp:
             mut=True, dtype, ConvLayout, MutAnyOrigin
         ](kernel.unsafe_ptr(), conv_layout_val)
 
+=======
+        var out_tensor = output.to_layout_tensor()
+        var input_tensor = input.to_layout_tensor()
+        var kernel_tensor = kernel.to_layout_tensor()
+        comptime in_layout = input_tensor.layout
+        comptime out_layout = out_tensor.layout
+        comptime conv_layout = kernel_tensor.layout
+
+>>>>>>> 9cf6764 (Mdoc/fixes (#235))
         comptime if target == "gpu":
             var gpu_ctx = ctx.get_device_context()
             # making sure the output tensor is zeroed out before the kernel is called
