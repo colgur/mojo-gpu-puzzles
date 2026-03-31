@@ -26,10 +26,14 @@ def butterfly_pair_swap[
     This is the foundation of butterfly network communication patterns.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     # FILL ME IN (4 lines)
 
@@ -52,10 +56,14 @@ def butterfly_parallel_max[
     for any WARP_SIZE (32, 64, etc.).
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     # FILL ME IN (roughly 7 lines)
 
@@ -82,10 +90,14 @@ def butterfly_conditional_max[
     Demonstrates conditional logic combined with butterfly communication patterns.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     var lane = lane_id()
 
     if global_i < size:
@@ -126,10 +138,14 @@ def warp_inclusive_prefix_sum[
     For multi-warp scenarios, additional coordination would be needed.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     # FILL ME IN (roughly 4 lines)
 
@@ -162,10 +178,14 @@ def warp_partition[
     var Result: [3, 1, 2, 4, 7, 8, 9, 6] (< pivot | >= pivot).
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     if global_i < size:
         var current_val = input[global_i]
@@ -281,10 +301,14 @@ def test_butterfly_conditional_max() raises:
                 if i < 9:
                     var values = [3, 1, 7, 2, 9, 4, 8, 5, 6]
 <<<<<<< HEAD
+<<<<<<< HEAD
                     input_host[i] = Scalar[dtype](values[i])
 =======
                     input_host[i] = values[i]
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+                    input_host[i] = Scalar[dtype](values[i])
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
                 else:
                     input_host[i] = Scalar[dtype](i % 10)
 
@@ -391,10 +415,14 @@ def test_warp_partition() raises:
 
         # Create test data: mix of values above and below pivot
 <<<<<<< HEAD
+<<<<<<< HEAD
         var pivot_value = Scalar[dtype](5.0)
 =======
         var pivot_value = Float32(5.0)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+        var pivot_value = Scalar[dtype](5.0)
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
         with input_buf.map_to_host() as input_host:
             # Create: [3, 7, 1, 8, 2, 9, 4, 6, ...]
             var test_values = [

@@ -26,10 +26,14 @@ def conv_1d_simple[
 ):
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 <<<<<<< HEAD
+<<<<<<< HEAD
     var local_i = thread_idx.x
 =======
     var local_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var local_i = thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     var shared_a = LayoutTensor[
         dtype,
         Layout.row_major(SIZE),
@@ -95,12 +99,17 @@ def conv_1d_block_boundary[
     b: LayoutTensor[dtype, conv_layout, ImmutAnyOrigin],
 ):
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     # first: need to account for padding
     var shared_a = LayoutTensor[
         dtype,

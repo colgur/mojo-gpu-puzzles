@@ -25,10 +25,14 @@ def minimal_kernel[
 ):
     """Minimal SAXPY kernel - simple and register-light for high occupancy."""
 <<<<<<< HEAD
+<<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     if i < size:
         # Direct computation: y[i] = alpha * x[i] + y[i]
         # Uses minimal registers (~8), no shared memory
@@ -58,10 +62,14 @@ def sophisticated_kernel[
     ].stack_allocation()  # 48KB
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     if i < size:
@@ -159,10 +167,14 @@ def balanced_kernel[
     ].stack_allocation()  # 16KB total
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     if i < size:
@@ -346,10 +358,14 @@ def test_minimal() raises:
         with y.map_to_host() as y_host, x.map_to_host() as x_host:
             for i in range(10):  # Check first 10
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+                var expected = ALPHA * x_host[i] + Scalar[dtype](
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]
@@ -393,10 +409,14 @@ def test_sophisticated() raises:
         with y.map_to_host() as y_host, x.map_to_host() as x_host:
             for i in range(10):  # Check first 10
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+                var expected = ALPHA * x_host[i] + Scalar[dtype](
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]
@@ -441,10 +461,14 @@ def test_balanced() raises:
         with y.map_to_host() as y_host, x.map_to_host() as x_host:
             for i in range(10):  # Check first 10
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+                var expected = ALPHA * x_host[i] + Scalar[dtype](
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]

@@ -50,10 +50,14 @@ def axis_sum[
 
     # do reduction sum per each block
 <<<<<<< HEAD
+<<<<<<< HEAD
     var stride = TPB // 2
 =======
     var stride = UInt(TPB // 2)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var stride = TPB // 2
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     while stride > 0:
         # Read phase: all threads read the values they need first to avoid race conditions
         var temp_val: output.element_type = 0

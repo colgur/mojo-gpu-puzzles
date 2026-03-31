@@ -48,12 +48,17 @@ def traditional_dot_product_p12_style[
         address_space=AddressSpace.SHARED,
     ].stack_allocation()
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     if global_i < size:
         shared[local_i] = (a[global_i] * b[global_i]).reduce_add()
@@ -85,10 +90,14 @@ def simple_warp_dot_product[
     b: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
 ):
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     # Each thread computes one partial product using vectorized approach as values in Mojo are SIMD based
     var partial_product: Scalar[dtype] = 0

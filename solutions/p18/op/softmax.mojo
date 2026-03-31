@@ -40,10 +40,14 @@ def softmax_gpu_kernel[
         address_space=AddressSpace.SHARED,
     ].stack_allocation()
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = thread_idx.x
 =======
     var global_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     # Initialize out-of-bounds (shared_max[local_i], global_i >= input_size) shared memory addresses to the minimum
     # finite value for dtype, ensuring that if these elements are accessed in the parallel max reduction below they

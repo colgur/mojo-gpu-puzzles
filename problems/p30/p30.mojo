@@ -25,10 +25,14 @@ def kernel1[
     size: Int,
 ):
 <<<<<<< HEAD
+<<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     if i < size:
         output[i] = a[i] + b[i]
 
@@ -46,10 +50,14 @@ def kernel2[
     size: Int,
 ):
 <<<<<<< HEAD
+<<<<<<< HEAD
     var tid = block_idx.x * block_dim.x + thread_idx.x
 =======
     var tid = Int(block_idx.x * block_dim.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var tid = block_idx.x * block_dim.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     var stride = 512
 
     var i = tid
@@ -71,10 +79,14 @@ def kernel3[
     size: Int,
 ):
 <<<<<<< HEAD
+<<<<<<< HEAD
     var tid = block_idx.x * block_dim.x + thread_idx.x
 =======
     var tid = Int(block_idx.x * block_dim.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var tid = block_idx.x * block_dim.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     var total_threads = (SIZE // 1024) * 1024
 
     for step in range(0, size, total_threads):

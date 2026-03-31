@@ -22,12 +22,17 @@ def conv1d_kernel[
     kernel: LayoutTensor[dtype, conv_layout, MutAnyOrigin],
 ):
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     # first: need to account for padding
     var shared_a = LayoutTensor[
         dtype,

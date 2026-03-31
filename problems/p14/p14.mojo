@@ -55,10 +55,14 @@ def prefix_sum_local_phase[
 def prefix_sum_block_sum_phase[
     layout: Layout
 <<<<<<< HEAD
+<<<<<<< HEAD
 ](output: LayoutTensor[dtype, layout, MutAnyOrigin], size: Int):
 =======
 ](output: LayoutTensor[dtype, layout, MutAnyOrigin], size: UInt):
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+](output: LayoutTensor[dtype, layout, MutAnyOrigin], size: Int):
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     # FILL ME IN (roughly 3 lines)
 

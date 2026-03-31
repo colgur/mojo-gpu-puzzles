@@ -40,10 +40,14 @@ def dot_product[
 
     # Parallel reduction in shared memory
 <<<<<<< HEAD
+<<<<<<< HEAD
     var stride = TPB // 2
 =======
     var stride = UInt(TPB // 2)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var stride = TPB // 2
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     while stride > 0:
         if local_i < stride:
             shared[local_i] += shared[local_i + stride]

@@ -30,10 +30,14 @@ def block_sum_dot_product[
     Replaces manual shared memory + barriers + tree reduction with one line."""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     # Each thread computes partial product
@@ -75,12 +79,17 @@ def traditional_dot_product[
         address_space=AddressSpace.SHARED,
     ].stack_allocation()
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     # Each thread computes partial product
     if global_i < size:
@@ -128,12 +137,17 @@ def block_histogram_bin_extract[
     """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     # Step 1: Each thread determines its bin and element value
     var my_value: Scalar[dtype] = 0.0
@@ -169,10 +183,14 @@ def block_histogram_bin_extract[
     if local_i == tpb - 1:
         # Inclusive sum = exclusive sum + my contribution
 <<<<<<< HEAD
+<<<<<<< HEAD
         var total_count = write_offset[0] + Int32(belongs_to_target)
 =======
         var total_count = write_offset[0] + belongs_to_target
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+        var total_count = write_offset[0] + Int32(belongs_to_target)
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
         count_output[0] = total_count
 
 
@@ -199,10 +217,14 @@ def block_normalize_vector[
     """
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     # Step 1: Each thread loads its element

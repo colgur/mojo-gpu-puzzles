@@ -49,6 +49,7 @@ def async_copy_overlap_convolution[
     ].stack_allocation()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     var local_i = thread_idx.x
 
     # Phase 1: Launch async copy for input tile
@@ -61,6 +62,13 @@ def async_copy_overlap_convolution[
     # Note: tile() does NOT perform bounds checking - ensure valid tile bounds
     var input_tile = input.tile[CONV_TILE_SIZE](Int(block_idx.x))
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var local_i = thread_idx.x
+
+    # Phase 1: Launch async copy for input tile
+    # Note: tile() does NOT perform bounds checking - ensure valid tile bounds
+    var input_tile = input.tile[CONV_TILE_SIZE](block_idx.x)
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     # Use async copy with thread layout matching p14 pattern
     comptime load_layout = Layout.row_major(THREADS_PER_BLOCK_ASYNC)
@@ -76,10 +84,14 @@ def async_copy_overlap_convolution[
 
     # Phase 4: Compute convolution
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_idx.x * CONV_TILE_SIZE + local_i
 =======
     var global_i = Int(block_idx.x) * CONV_TILE_SIZE + local_i
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_idx.x * CONV_TILE_SIZE + local_i
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     if local_i < CONV_TILE_SIZE and global_i < output.shape[0]():
         var result: output.element_type = 0
 

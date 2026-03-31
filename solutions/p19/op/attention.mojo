@@ -43,10 +43,14 @@ def matmul_idiomatic_tiled[
 ):
     """Updated idiomatic tiled matrix multiplication from p16."""
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     var local_row = thread_idx.y
     var local_col = thread_idx.x
     var tiled_row = block_idx.y * MATMUL_BLOCK_DIM_XY + local_row
     var tiled_col = block_idx.x * MATMUL_BLOCK_DIM_XY + local_col
+<<<<<<< HEAD
 
     # Get the tile of the output matrix that this thread block is responsible for
     var out_tile = output.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
@@ -61,6 +65,12 @@ def matmul_idiomatic_tiled[
     var out_tile = output.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
         Int(block_idx.y), Int(block_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+
+    # Get the tile of the output matrix that this thread block is responsible for
+    var out_tile = output.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
+        block_idx.y, block_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     )
     var a_shared = LayoutTensor[
         dtype,
@@ -89,6 +99,7 @@ def matmul_idiomatic_tiled[
         # Get tiles from A and B matrices
         var a_tile = a.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
 <<<<<<< HEAD
+<<<<<<< HEAD
             block_idx.y, idx
         )
         var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
@@ -99,6 +110,12 @@ def matmul_idiomatic_tiled[
         var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
             idx, Int(block_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+            block_idx.y, idx
+        )
+        var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
+            idx, block_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
         )
 
         # Asynchronously copy tiles to shared memory with consistent orientation
@@ -154,6 +171,7 @@ def transpose_kernel[
     ].stack_allocation()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     var local_row = thread_idx.y
     var local_col = thread_idx.x
 
@@ -166,6 +184,13 @@ def transpose_kernel[
     var global_row = Int(block_idx.y) * TRANSPOSE_BLOCK_DIM_XY + local_row
     var global_col = Int(block_idx.x) * TRANSPOSE_BLOCK_DIM_XY + local_col
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var local_row = thread_idx.y
+    var local_col = thread_idx.x
+
+    var global_row = block_idx.y * TRANSPOSE_BLOCK_DIM_XY + local_row
+    var global_col = block_idx.x * TRANSPOSE_BLOCK_DIM_XY + local_col
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     if global_row < rows and global_col < cols:
         shared_tile[local_row, local_col] = inp[global_row, global_col]
@@ -173,12 +198,17 @@ def transpose_kernel[
     barrier()
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     var out_row = block_idx.x * TRANSPOSE_BLOCK_DIM_XY + local_row
     var out_col = block_idx.y * TRANSPOSE_BLOCK_DIM_XY + local_col
 =======
     var out_row = Int(block_idx.x) * TRANSPOSE_BLOCK_DIM_XY + local_row
     var out_col = Int(block_idx.y) * TRANSPOSE_BLOCK_DIM_XY + local_col
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var out_row = block_idx.x * TRANSPOSE_BLOCK_DIM_XY + local_row
+    var out_col = block_idx.y * TRANSPOSE_BLOCK_DIM_XY + local_col
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     # Store data from shared memory to global memory (coalesced write)
     # Note: we transpose the shared memory access pattern
@@ -214,10 +244,14 @@ def softmax_gpu_kernel[
         address_space=AddressSpace.SHARED,
     ].stack_allocation()
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = thread_idx.x
 =======
     var global_i = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     # Initialize out-of-bounds (shared_max[local_i], global_i >= input_size) shared memory addresses to the minimum
     # finite value for dtype, ensuring that if these elements are accessed in the parallel max reduction below they

@@ -42,12 +42,17 @@ def main() raises:
                 for i in range(SIZE):
                     var k = j * SIZE + i
 <<<<<<< HEAD
+<<<<<<< HEAD
                     a_host[k] = Scalar[dtype](k)
                     expected[k] = Scalar[dtype](k + 10)
 =======
                     a_host[k] = k
                     expected[k] = k + 10
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+                    a_host[k] = Scalar[dtype](k)
+                    expected[k] = Scalar[dtype](k + 10)
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
         ctx.enqueue_function[add_10_blocks_2d, add_10_blocks_2d](
             out,

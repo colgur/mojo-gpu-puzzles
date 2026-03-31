@@ -34,6 +34,7 @@ def matmul_idiomatic_tiled[
     var local_row = thread_idx.y
     var local_col = thread_idx.x
 <<<<<<< HEAD
+<<<<<<< HEAD
     var tiled_row = block_idx.y * MATMUL_BLOCK_DIM_XY + local_row
     var tiled_col = block_idx.x * MATMUL_BLOCK_DIM_XY + local_col
 
@@ -48,6 +49,14 @@ def matmul_idiomatic_tiled[
     var out_tile = output.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
         Int(block_idx.y), Int(block_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var tiled_row = block_idx.y * MATMUL_BLOCK_DIM_XY + local_row
+    var tiled_col = block_idx.x * MATMUL_BLOCK_DIM_XY + local_col
+
+    # Get the tile of the output matrix that this thread block is responsible for
+    var out_tile = output.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
+        block_idx.y, block_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     )
     var a_shared = LayoutTensor[
         dtype,
@@ -76,6 +85,7 @@ def matmul_idiomatic_tiled[
         # Get tiles from A and B matrices
         var a_tile = a.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
 <<<<<<< HEAD
+<<<<<<< HEAD
             block_idx.y, idx
         )
         var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
@@ -86,6 +96,12 @@ def matmul_idiomatic_tiled[
         var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
             idx, Int(block_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+            block_idx.y, idx
+        )
+        var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
+            idx, block_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
         )
 
         # Asynchronously copy tiles to shared memory with consistent orientation
@@ -140,6 +156,7 @@ def layernorm_kernel[
     ln_bias: LayoutTensor[dtype, ln_params_layout, ImmutAnyOrigin],
 ):
 <<<<<<< HEAD
+<<<<<<< HEAD
     var batch_idx = block_idx.x
     var seq_idx = block_idx.y
     var hidden_idx = thread_idx.x
@@ -148,6 +165,11 @@ def layernorm_kernel[
     var seq_idx = Int(block_idx.y)
     var hidden_idx = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var batch_idx = block_idx.x
+    var seq_idx = block_idx.y
+    var hidden_idx = thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     if (
         batch_idx >= batch_size
@@ -240,6 +262,7 @@ def add_bias_kernel[
 ):
     """Simple bias addition."""
 <<<<<<< HEAD
+<<<<<<< HEAD
     var batch_idx = block_idx.x
     var seq_idx = block_idx.y
     var out_idx = thread_idx.x
@@ -248,6 +271,11 @@ def add_bias_kernel[
     var seq_idx = Int(block_idx.y)
     var out_idx = Int(thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var batch_idx = block_idx.x
+    var seq_idx = block_idx.y
+    var out_idx = thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     if batch_idx >= batch_size or seq_idx >= seq_len or out_idx >= output_dim:
         return
@@ -285,12 +313,17 @@ def minimal_fused_kernel[
     # Grid: (batch_size, seq_len) - one thread block per sequence position
     # Block: (1,) - single thread per sequence position to avoid redundant computation
 <<<<<<< HEAD
+<<<<<<< HEAD
     var batch_idx = block_idx.x
     var seq_idx = block_idx.y
 =======
     var batch_idx = Int(block_idx.x)
     var seq_idx = Int(block_idx.y)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var batch_idx = block_idx.x
+    var seq_idx = block_idx.y
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     if batch_idx >= batch_size or seq_idx >= seq_len:
         return
@@ -360,12 +393,17 @@ def minimal_fused_kernel_backward[
     # Grid: (batch_size, seq_len) - one thread per sequence position
     # Block: (1,) - single thread per sequence position
 <<<<<<< HEAD
+<<<<<<< HEAD
     var batch_idx = block_idx.x
     var seq_idx = block_idx.y
 =======
     var batch_idx = Int(block_idx.x)
     var seq_idx = Int(block_idx.y)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var batch_idx = block_idx.x
+    var seq_idx = block_idx.y
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     if batch_idx >= batch_size or seq_idx >= seq_len:
         return

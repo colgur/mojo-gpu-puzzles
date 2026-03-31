@@ -30,19 +30,27 @@ def cluster_coordination_basics[
 ):
     """Real cluster coordination using SM90+ cluster APIs."""
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     # Check what's happening with cluster ranks
     var my_block_rank = Int(block_rank_in_cluster())
 <<<<<<< HEAD
+<<<<<<< HEAD
     var block_id = block_idx.x
 =======
     var block_id = Int(block_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var block_id = block_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     var shared_data = LayoutTensor[
         dtype,
@@ -96,6 +104,7 @@ def cluster_collective_operations[
 ):
     """Cluster-wide collective operations using real cluster APIs."""
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
     var my_block_rank = Int(block_rank_in_cluster())
@@ -106,6 +115,12 @@ def cluster_collective_operations[
     var my_block_rank = Int(block_rank_in_cluster())
     var block_id = Int(block_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+    var my_block_rank = Int(block_rank_in_cluster())
+    var block_id = block_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     # Each thread accumulates its data
     var my_value: Float32 = 0.0
@@ -159,6 +174,7 @@ def advanced_cluster_patterns[
     """Advanced cluster programming using cluster masks and relaxed synchronization.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
     var my_block_rank = Int(block_rank_in_cluster())
@@ -169,6 +185,12 @@ def advanced_cluster_patterns[
     var my_block_rank = Int(block_rank_in_cluster())
     var block_id = Int(block_idx.x)
 >>>>>>> 11c7cd4 (Mdoc/fixes (#235))
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+    var my_block_rank = Int(block_rank_in_cluster())
+    var block_id = block_idx.x
+>>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 
     var shared_data = LayoutTensor[
         dtype,
