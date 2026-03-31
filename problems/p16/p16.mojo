@@ -51,7 +51,7 @@ def naive_matmul(
 =======
 =======
 def naive_matmul[
-    layout: Layout, size: UInt
+    layout: Layout, size: Int
 ](
     output: LayoutTensor[dtype, layout, MutAnyOrigin],
     a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
@@ -96,7 +96,7 @@ def single_block_matmul(
 =======
 =======
 def single_block_matmul[
-    layout: Layout, size: UInt
+    layout: Layout, size: Int
 ](
     output: LayoutTensor[dtype, layout, MutAnyOrigin],
     a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
@@ -149,7 +149,7 @@ def matmul_tiled(
 =======
 =======
 def matmul_tiled[
-    layout: Layout, size: UInt
+    layout: Layout, size: Int
 ](
     output: LayoutTensor[dtype, layout_tiled, MutAnyOrigin],
     a: LayoutTensor[dtype, layout_tiled, ImmutAnyOrigin],
@@ -215,7 +215,12 @@ def main() raises:
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         if argv()[1] == "--naive":
+<<<<<<< HEAD
             ctx.enqueue_function[naive_matmul, naive_matmul](
+=======
+            comptime kernel = naive_matmul[layout, SIZE]
+            ctx.enqueue_function[kernel, kernel](
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
                 out_tensor,
                 a_tensor,
                 b_tensor,
@@ -223,7 +228,12 @@ def main() raises:
                 block_dim=THREADS_PER_BLOCK,
             )
         elif argv()[1] == "--single-block":
+<<<<<<< HEAD
             ctx.enqueue_function[single_block_matmul, single_block_matmul](
+=======
+            comptime kernel = single_block_matmul[layout, SIZE]
+            ctx.enqueue_function[kernel, kernel](
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
                 out_tensor,
                 a_tensor,
                 b_tensor,
@@ -252,7 +262,12 @@ def main() raises:
             ](inp2)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
+<<<<<<< HEAD
             ctx.enqueue_function[matmul_tiled, matmul_tiled](
+=======
+            comptime kernel = matmul_tiled[layout_tiled, SIZE_TILED]
+            ctx.enqueue_function[kernel, kernel](
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
                 out_tensor_tiled,
                 a_tensor_tiled,
                 b_tensor_tiled,

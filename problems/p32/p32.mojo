@@ -65,9 +65,16 @@ def no_conflict_kernel[
         address_space=AddressSpace.SHARED,
     ].stack_allocation()
 
+<<<<<<< HEAD
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     # Load from global memory to shared memory - no conflicts
@@ -132,9 +139,16 @@ def two_way_conflict_kernel[
         address_space=AddressSpace.SHARED,
     ].stack_allocation()
 
+<<<<<<< HEAD
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     # CONFLICT: stride-2 access creates 2-way bank conflicts
@@ -291,6 +305,7 @@ def test_no_conflict() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = Scalar[dtype]((i + 11) * 2)
 =======
                 var expected = Float32((i + 11) * 2)
@@ -299,11 +314,19 @@ def test_no_conflict() raises:
                 var expected = Scalar[dtype]((i + 11) * 2)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                 var expected = Scalar[dtype]((i + 11) * 2)
 =======
                 var expected = Float32((i + 11) * 2)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+                var expected = Scalar[dtype]((i + 11) * 2)
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                 assert_almost_equal(result[i], expected, atol=1e-5)
 
         print("No-conflict kernel test: passed")
@@ -346,6 +369,7 @@ def test_two_way_conflict() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = Scalar[dtype]((i + 11) * 2)
 =======
                 var expected = Float32((i + 11) * 2)
@@ -354,11 +378,19 @@ def test_two_way_conflict() raises:
                 var expected = Scalar[dtype]((i + 11) * 2)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                 var expected = Scalar[dtype]((i + 11) * 2)
 =======
                 var expected = Float32((i + 11) * 2)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+                var expected = Scalar[dtype]((i + 11) * 2)
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                 assert_almost_equal(result[i], expected, atol=1e-5)
 
         print("Two-way conflict kernel test: passed")

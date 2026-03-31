@@ -35,8 +35,11 @@ def conv1d_kernel[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
@@ -57,6 +60,10 @@ def conv1d_kernel[
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
     # first: need to account for padding
     var shared_a = LayoutTensor[
         dtype,

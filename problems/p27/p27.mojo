@@ -71,10 +71,18 @@ def traditional_dot_product[
         MutAnyOrigin,
         address_space=AddressSpace.SHARED,
     ].stack_allocation()
+<<<<<<< HEAD
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
     var local_i = Int(thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
     # Each thread computes partial product
     if global_i < size:
@@ -128,6 +136,7 @@ def block_sum_dot_product[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -136,11 +145,19 @@ def block_sum_dot_product[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     # FILL IN (roughly 6 lines)
@@ -180,8 +197,11 @@ def block_histogram_bin_extract[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
@@ -195,7 +215,14 @@ def block_histogram_bin_extract[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
     # Step 1: Each thread determines its bin and element value
 
@@ -250,6 +277,7 @@ def block_normalize_vector[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -258,11 +286,19 @@ def block_normalize_vector[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     # Step 1: Each thread loads its element

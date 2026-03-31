@@ -58,10 +58,15 @@ def matmul_idiomatic_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var local_row = thread_idx.y
     var local_col = thread_idx.x
     var tiled_row = block_idx.y * MATMUL_BLOCK_DIM_XY + local_row
@@ -94,10 +99,12 @@ def matmul_idiomatic_tiled[
     var local_col = Int(thread_idx.x)
     var tiled_row = Int(block_idx.y) * MATMUL_BLOCK_DIM_XY + local_row
     var tiled_col = Int(block_idx.x) * MATMUL_BLOCK_DIM_XY + local_col
+=======
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 
     # Get the tile of the output matrix that this thread block is responsible for
     var out_tile = output.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
-        Int(block_idx.y), Int(block_idx.x)
+        block_idx.y, block_idx.x
     )
     var a_shared = LayoutTensor[
         dtype,
@@ -172,10 +179,10 @@ def matmul_idiomatic_tiled[
 =======
 =======
         var a_tile = a.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
-            Int(block_idx.y), idx
+            block_idx.y, idx
         )
         var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
-            idx, Int(block_idx.x)
+            idx, block_idx.x
         )
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
@@ -283,12 +290,17 @@ def transpose_kernel[
         address_space=AddressSpace.SHARED,
     ].stack_allocation()
 
-    var local_row = Int(thread_idx.y)
-    var local_col = Int(thread_idx.x)
+    var local_row = thread_idx.y
+    var local_col = thread_idx.x
 
+<<<<<<< HEAD
     var global_row = Int(block_idx.y) * TRANSPOSE_BLOCK_DIM_XY + local_row
     var global_col = Int(block_idx.x) * TRANSPOSE_BLOCK_DIM_XY + local_col
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+=======
+    var global_row = block_idx.y * TRANSPOSE_BLOCK_DIM_XY + local_row
+    var global_col = block_idx.x * TRANSPOSE_BLOCK_DIM_XY + local_col
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 
     if global_row < rows and global_col < cols:
         shared_tile_lt[local_row, local_col] = inp_lt[global_row, global_col]
@@ -298,8 +310,11 @@ def transpose_kernel[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var out_row = block_idx.x * TRANSPOSE_BLOCK_DIM_XY + local_row
     var out_col = block_idx.y * TRANSPOSE_BLOCK_DIM_XY + local_col
 =======
@@ -313,7 +328,14 @@ def transpose_kernel[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var out_row = block_idx.x * TRANSPOSE_BLOCK_DIM_XY + local_row
+    var out_col = block_idx.y * TRANSPOSE_BLOCK_DIM_XY + local_col
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
     # Store data from shared memory to global memory (coalesced write)
     # Note: we transpose the shared memory access pattern
@@ -392,9 +414,16 @@ def softmax_gpu_kernel[
         MutAnyOrigin,
         address_space=AddressSpace.SHARED,
     ].stack_allocation()
+<<<<<<< HEAD
     var global_i = Int(thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
     # Initialize out-of-bounds (shared_max[local_i], global_i >= input_size) shared memory addresses to the minimum
     # finite value for dtype, ensuring that if these elements are accessed in the parallel max reduction below they

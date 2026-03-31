@@ -41,7 +41,7 @@ def pooling(
 =======
     output: UnsafePointer[Scalar[dtype], MutAnyOrigin],
     a: UnsafePointer[Scalar[dtype], MutAnyOrigin],
-    size: UInt,
+    size: Int,
 ):
     var shared = stack_allocation[
         TPB,
@@ -62,7 +62,10 @@ def pooling(
         output[0] = shared[0]
     elif global_i == 1:
         output[1] = shared[0] + shared[1]
+<<<<<<< HEAD
     # Handle general case
+=======
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
     elif 1 < global_i < size:
         output[global_i] = (
             shared[local_i - 2] + shared[local_i - 1] + shared[local_i]
@@ -82,6 +85,7 @@ def main() raises:
         with a.map_to_host() as a_host:
             for i in range(SIZE):
                 a_host[i] = Scalar[dtype](i)
+<<<<<<< HEAD
 
         var out_tensor = TileTensor(out, layout)
         var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
@@ -89,6 +93,12 @@ def main() raises:
         ctx.enqueue_function[pooling, pooling](
             out_tensor,
             a_tensor,
+=======
+
+        ctx.enqueue_function[pooling, pooling](
+            out,
+            a,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
             SIZE,
             grid_dim=BLOCKS_PER_GRID,
             block_dim=THREADS_PER_BLOCK,

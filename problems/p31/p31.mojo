@@ -17,8 +17,12 @@ comptime SIZE = 32 * 1024 * 1024  # 32M elements - larger workload to show occup
 comptime THREADS_PER_BLOCK = (1024, 1)
 comptime BLOCKS_PER_GRID = (SIZE // 1024, 1)
 comptime dtype = DType.float32
+<<<<<<< HEAD
 comptime layout = row_major[SIZE]()
 comptime LayoutType = type_of(layout)
+=======
+comptime layout = Layout.row_major(SIZE)
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 comptime ALPHA = Scalar[dtype](2.5)  # SAXPY coefficient
 
 
@@ -40,6 +44,7 @@ def minimal_kernel[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -48,11 +53,19 @@ def minimal_kernel[
     var i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     if i < size:
         # Direct computation: y[i] = alpha * x[i] + y[i]
         # Uses minimal registers (~8), no shared memory
@@ -105,9 +118,16 @@ def sophisticated_kernel[
         address_space=AddressSpace.SHARED,
     ].stack_allocation()  # 48KB
 
+<<<<<<< HEAD
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     if i < size:
@@ -228,9 +248,16 @@ def balanced_kernel[
         address_space=AddressSpace.SHARED,
     ].stack_allocation()  # 16KB total
 
+<<<<<<< HEAD
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     if i < size:
@@ -452,6 +479,7 @@ def test_minimal() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
@@ -460,11 +488,19 @@ def test_minimal() raises:
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+                var expected = ALPHA * x_host[i] + Scalar[dtype](
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]
@@ -516,6 +552,7 @@ def test_sophisticated() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
@@ -524,11 +561,19 @@ def test_sophisticated() raises:
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+                var expected = ALPHA * x_host[i] + Scalar[dtype](
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]
@@ -581,6 +626,7 @@ def test_balanced() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
@@ -589,11 +635,19 @@ def test_balanced() raises:
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                 var expected = ALPHA * x_host[i] + Scalar[dtype](
 =======
                 var expected = ALPHA * x_host[i] + Float32(
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+                var expected = ALPHA * x_host[i] + Scalar[dtype](
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                     i + 2
                 )  # original y[i] was (i + 2)
                 var actual = y_host[i]

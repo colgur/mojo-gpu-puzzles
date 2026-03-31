@@ -21,10 +21,14 @@ def dot_product[
     a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
     b: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
 <<<<<<< HEAD
+<<<<<<< HEAD
     size: Int,
 =======
     size: UInt,
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+    size: Int,
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 ):
     var shared = LayoutTensor[
         dtype,
@@ -46,6 +50,7 @@ def dot_product[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var stride = TPB // 2
 =======
     var stride = UInt(TPB // 2)
@@ -56,6 +61,9 @@ def dot_product[
 =======
     var stride = UInt(TPB // 2)
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+    var stride = TPB // 2
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     while stride > 0:
         if local_i < stride:
             shared[local_i] += shared[local_i + stride]
@@ -83,12 +91,17 @@ def main() raises:
         with a.map_to_host() as a_host, b.map_to_host() as b_host:
             for i in range(SIZE):
 <<<<<<< HEAD
+<<<<<<< HEAD
                 a_host[i] = Scalar[dtype](i)
                 b_host[i] = Scalar[dtype](i)
 =======
                 a_host[i] = i
                 b_host[i] = i
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+                a_host[i] = Scalar[dtype](i)
+                b_host[i] = Scalar[dtype](i)
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
         var out_tensor = LayoutTensor[dtype, out_layout, MutAnyOrigin](out)
         var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
@@ -100,10 +113,14 @@ def main() raises:
             a_tensor,
             b_tensor,
 <<<<<<< HEAD
+<<<<<<< HEAD
             SIZE,
 =======
             UInt(SIZE),
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+            SIZE,
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
             grid_dim=BLOCKS_PER_GRID,
             block_dim=THREADS_PER_BLOCK,
         )

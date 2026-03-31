@@ -34,8 +34,12 @@ def axis_sum[
 ](
     output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
     a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
+<<<<<<< HEAD
     size: UInt,
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+=======
+    size: Int,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 ):
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
@@ -73,6 +77,7 @@ def axis_sum[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var stride = TPB // 2
 =======
     var stride = UInt(TPB // 2)
@@ -81,11 +86,19 @@ def axis_sum[
     var stride = TPB // 2
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var stride = TPB // 2
 =======
     var stride = UInt(TPB // 2)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var stride = TPB // 2
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     while stride > 0:
         # Read phase: all threads read the values they need first to avoid race conditions
         var temp_val: output.ElementType = 0

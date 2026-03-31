@@ -46,6 +46,7 @@ def cluster_coordination_basics[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -54,11 +55,19 @@ def cluster_coordination_basics[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var local_i = thread_idx.x
 
     # Check what's happening with cluster ranks
@@ -66,8 +75,11 @@ def cluster_coordination_basics[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var block_id = block_idx.x
 =======
     var block_id = Int(block_idx.x)
@@ -81,6 +93,9 @@ def cluster_coordination_basics[
     ](row_major[tpb]())
 =======
     var block_id = Int(block_idx.x)
+=======
+    var block_id = block_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 
     var shared_data = LayoutTensor[
         dtype,
@@ -139,8 +154,11 @@ def cluster_collective_operations[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
@@ -154,7 +172,14 @@ def cluster_collective_operations[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
     # FILL IN (roughly 24 lines)
 
@@ -179,8 +204,11 @@ def advanced_cluster_patterns[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
 =======
@@ -194,7 +222,14 @@ def advanced_cluster_patterns[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+    var local_i = thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
     # FILL IN (roughly 26 lines)
 

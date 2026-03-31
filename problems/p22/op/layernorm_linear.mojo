@@ -51,8 +51,11 @@ def matmul_idiomatic_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var tiled_row = block_idx.y * MATMUL_BLOCK_DIM_XY + local_row
     var tiled_col = block_idx.x * MATMUL_BLOCK_DIM_XY + local_col
 
@@ -80,10 +83,14 @@ def matmul_idiomatic_tiled[
 =======
     var tiled_row = Int(block_idx.y * MATMUL_BLOCK_DIM_XY + local_row)
     var tiled_col = Int(block_idx.x * MATMUL_BLOCK_DIM_XY + local_col)
+=======
+    var tiled_row = block_idx.y * MATMUL_BLOCK_DIM_XY + local_row
+    var tiled_col = block_idx.x * MATMUL_BLOCK_DIM_XY + local_col
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 
     # Get the tile of the output matrix that this thread block is responsible for
     var out_tile = output.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
-        Int(block_idx.y), Int(block_idx.x)
+        block_idx.y, block_idx.x
     )
     var a_shared = LayoutTensor[
         dtype,
@@ -129,8 +136,11 @@ def matmul_idiomatic_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
             block_idx.y, idx
         )
         var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
@@ -150,7 +160,16 @@ def matmul_idiomatic_tiled[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+            block_idx.y, idx
+        )
+        var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
+            idx, block_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
         )
 
         # Asynchronously copy tiles to shared memory with consistent orientation
@@ -212,8 +231,11 @@ def layernorm_kernel[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var batch_idx = block_idx.x
     var seq_idx = block_idx.y
     var hidden_idx = thread_idx.x
@@ -230,7 +252,15 @@ def layernorm_kernel[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var batch_idx = block_idx.x
+    var seq_idx = block_idx.y
+    var hidden_idx = thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
     if (
         batch_idx >= batch_size
@@ -259,9 +289,14 @@ def transpose_kernel[
 =======
     layout_in: Layout,
     layout_out: Layout,
+<<<<<<< HEAD
     rows: UInt,
     cols: UInt,
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+=======
+    rows: Int,
+    cols: Int,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
     dtype: DType = DType.float32,
 ](
     output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
@@ -332,8 +367,11 @@ def add_bias_kernel[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var batch_idx = block_idx.x
     var seq_idx = block_idx.y
     var out_idx = thread_idx.x
@@ -350,7 +388,15 @@ def add_bias_kernel[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var batch_idx = block_idx.x
+    var seq_idx = block_idx.y
+    var out_idx = thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
     if batch_idx >= batch_size or seq_idx >= seq_len or out_idx >= output_dim:
         return
@@ -397,8 +443,11 @@ def minimal_fused_kernel[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var batch_idx = block_idx.x
     var seq_idx = block_idx.y
 =======
@@ -412,7 +461,14 @@ def minimal_fused_kernel[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var batch_idx = block_idx.x
+    var seq_idx = block_idx.y
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
     if batch_idx >= batch_size or seq_idx >= seq_len:
         return
@@ -477,8 +533,11 @@ def minimal_fused_kernel_backward[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var batch_idx = block_idx.x
     var seq_idx = block_idx.y
 =======
@@ -492,7 +551,14 @@ def minimal_fused_kernel_backward[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var batch_idx = block_idx.x
+    var seq_idx = block_idx.y
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
     if batch_idx >= batch_size or seq_idx >= seq_len:
         return
@@ -719,6 +785,11 @@ struct LayerNormLinearCustomOp:
                     output_dim + TRANSPOSE_BLOCK_DIM_XY - 1
                 ) // TRANSPOSE_BLOCK_DIM_XY
                 comptime kernel2 = transpose_kernel[
+<<<<<<< HEAD
+=======
+                    weight_layout,
+                    transposed_weight_tensor.layout,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
                     output_dim,
                     hidden_dim,
                 ]

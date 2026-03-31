@@ -48,9 +48,16 @@ def kernel1[
     b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
     size: Int,
 ):
+<<<<<<< HEAD
     var i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     if i < size:
         output[i] = a[i] + b[i]
 
@@ -85,9 +92,16 @@ def kernel2[
     b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
     size: Int,
 ):
+<<<<<<< HEAD
     var tid = Int(block_idx.x * block_dim.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var tid = block_idx.x * block_dim.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var stride = 512
 
     var i = tid
@@ -126,9 +140,16 @@ def kernel3[
     b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
     size: Int,
 ):
+<<<<<<< HEAD
     var tid = Int(block_idx.x * block_dim.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var tid = block_idx.x * block_dim.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var total_threads = (SIZE // 1024) * 1024
 
     for step in range(0, size, total_threads):

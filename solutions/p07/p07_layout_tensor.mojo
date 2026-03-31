@@ -19,10 +19,14 @@ def add_10_blocks_2d[
     output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
     a: LayoutTensor[dtype, a_layout, ImmutAnyOrigin],
 <<<<<<< HEAD
+<<<<<<< HEAD
     size: Int,
 =======
     size: UInt,
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+    size: Int,
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 ):
     var row = block_dim.y * block_idx.y + thread_idx.y
     var col = block_dim.x * block_idx.x + thread_idx.x
@@ -52,6 +56,7 @@ def main() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                     a_host[k] = Scalar[dtype](k)
                     expected_buf[k] = Scalar[dtype](k + 10)
 =======
@@ -66,6 +71,10 @@ def main() raises:
                     a_host[k] = k
                     expected_buf[k] = k + 10
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+                    a_host[k] = Scalar[dtype](k)
+                    expected_buf[k] = Scalar[dtype](k + 10)
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
         var a_tensor = LayoutTensor[dtype, a_layout, ImmutAnyOrigin](a)
 
@@ -74,10 +83,14 @@ def main() raises:
             out_tensor,
             a_tensor,
 <<<<<<< HEAD
+<<<<<<< HEAD
             SIZE,
 =======
             UInt(SIZE),
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+            SIZE,
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
             grid_dim=BLOCKS_PER_GRID,
             block_dim=THREADS_PER_BLOCK,
         )

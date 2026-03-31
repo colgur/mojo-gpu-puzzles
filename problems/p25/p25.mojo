@@ -37,6 +37,7 @@ def neighbor_difference[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -45,11 +46,19 @@ def neighbor_difference[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var lane = Int(lane_id())
 
     # FILL IN (roughly 7 lines)
@@ -83,6 +92,7 @@ def moving_average_3[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -91,11 +101,19 @@ def moving_average_3[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var lane = Int(lane_id())
 
     # FILL IN (roughly 10 lines)
@@ -123,6 +141,7 @@ def broadcast_shuffle_coordination[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -131,11 +150,19 @@ def broadcast_shuffle_coordination[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var lane = Int(lane_id())
     if global_i < size:
         var scale_factor: output.ElementType = 0.0
@@ -164,6 +191,7 @@ def basic_broadcast[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -172,11 +200,19 @@ def basic_broadcast[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var lane = Int(lane_id())
     if global_i < size:
         var broadcast_value: output.ElementType = 0.0
@@ -205,6 +241,7 @@ def conditional_broadcast[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
@@ -213,11 +250,19 @@ def conditional_broadcast[
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 =======
     var global_i = Int(block_dim.x * block_idx.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = block_dim.x * block_idx.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var lane = Int(lane_id())
     if global_i < size:
         var decision_value: output.ElementType = 0.0
@@ -411,6 +456,7 @@ def test_broadcast_shuffle_coordination() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             var expected_scale = Scalar[dtype](5.0)
 =======
             var expected_scale = Float32(5.0)
@@ -419,11 +465,19 @@ def test_broadcast_shuffle_coordination() raises:
             var expected_scale = Scalar[dtype](5.0)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
             var expected_scale = Scalar[dtype](5.0)
 =======
             var expected_scale = Float32(5.0)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+            var expected_scale = Scalar[dtype](5.0)
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
             for i in range(SIZE):
                 if i < SIZE - 1:
@@ -487,6 +541,7 @@ def test_basic_broadcast() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             var expected_broadcast = Scalar[dtype](10.0)
 =======
             var expected_broadcast = Float32(10.0)
@@ -495,11 +550,19 @@ def test_basic_broadcast() raises:
             var expected_broadcast = Scalar[dtype](10.0)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
             var expected_broadcast = Scalar[dtype](10.0)
 =======
             var expected_broadcast = Float32(10.0)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+            var expected_broadcast = Scalar[dtype](10.0)
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
             for i in range(SIZE):
                 expected_buf[i] = expected_broadcast + input_host[i]
 
@@ -528,10 +591,15 @@ def test_conditional_broadcast() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                 Scalar[dtype](3.0),
                 Scalar[dtype](1.0),
                 Scalar[dtype](7.0),
@@ -542,8 +610,11 @@ def test_conditional_broadcast() raises:
                 Scalar[dtype](8.0),
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 =======
                 Float32(3.0),
                 Float32(1.0),
@@ -559,7 +630,12 @@ def test_conditional_broadcast() raises:
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
             ]
             for i in range(SIZE):
                 input_host[i] = test_values[i % len(test_values)]
@@ -596,6 +672,7 @@ def test_conditional_broadcast() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             var expected_max = Scalar[dtype](9.0)
 =======
             var expected_max = Float32(9.0)
@@ -604,11 +681,19 @@ def test_conditional_broadcast() raises:
             var expected_max = Scalar[dtype](9.0)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
             var expected_max = Scalar[dtype](9.0)
 =======
             var expected_max = Float32(9.0)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+            var expected_max = Scalar[dtype](9.0)
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
             var threshold = expected_max / 2.0
             for i in range(SIZE):
                 if input_host[i] >= threshold:

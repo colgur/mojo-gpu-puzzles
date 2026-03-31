@@ -33,8 +33,12 @@ def broadcast_add(
     output: UnsafePointer[Scalar[dtype], MutAnyOrigin],
     a: UnsafePointer[Scalar[dtype], MutAnyOrigin],
     b: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+<<<<<<< HEAD
     size: UInt,
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+=======
+    size: Int,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 ):
     var row = thread_idx.y
     var col = thread_idx.x
@@ -80,9 +84,15 @@ def main() raises:
         var b_tensor = TileTensor[mut=False, dtype, BLayout](b, b_layout)
 
         ctx.enqueue_function[broadcast_add, broadcast_add](
+<<<<<<< HEAD
             out_tensor,
             a_tensor,
             b_tensor,
+=======
+            out,
+            a,
+            b,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
             SIZE,
             grid_dim=BLOCKS_PER_GRID,
             block_dim=THREADS_PER_BLOCK,

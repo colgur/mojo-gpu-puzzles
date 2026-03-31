@@ -29,8 +29,12 @@ def add_10_blocks_2d(
 =======
     output: UnsafePointer[Scalar[dtype], MutAnyOrigin],
     a: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+<<<<<<< HEAD
     size: UInt,
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+=======
+    size: Int,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 ):
     var row = block_dim.y * block_idx.y + thread_idx.y
     var col = block_dim.x * block_idx.x + thread_idx.x
@@ -67,8 +71,11 @@ def main() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                     a_host[k] = Scalar[dtype](k)
 <<<<<<< HEAD
                     expected[k] = Scalar[dtype](k + 10)
@@ -96,6 +103,14 @@ def main() raises:
         ctx.enqueue_function[add_10_blocks_2d, add_10_blocks_2d](
             out_tensor,
             a_tensor,
+=======
+                    a_host[k] = Scalar[dtype](k)
+                    expected[k] = Scalar[dtype](k + 10)
+
+        ctx.enqueue_function[add_10_blocks_2d, add_10_blocks_2d](
+            out,
+            a,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
             SIZE,
             grid_dim=BLOCKS_PER_GRID,
             block_dim=THREADS_PER_BLOCK,

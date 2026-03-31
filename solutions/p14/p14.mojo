@@ -39,7 +39,7 @@ def prefix_sum_simple[
 ](
     output: LayoutTensor[dtype, layout, MutAnyOrigin],
     a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
-    size: UInt,
+    size: Int,
 ):
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
@@ -58,6 +58,7 @@ def prefix_sum_simple[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var offset = 1
 =======
     var offset = UInt(1)
@@ -66,11 +67,19 @@ def prefix_sum_simple[
     var offset = 1
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var offset = 1
 =======
     var offset = UInt(1)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var offset = 1
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     for i in range(Int(log2(Scalar[dtype](TPB)))):
         var current_val: output.ElementType = 0
         if local_i >= offset and local_i < size:
@@ -120,7 +129,7 @@ def prefix_sum_local_phase[
 ](
     output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
     a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
-    size: UInt,
+    size: Int,
 ):
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x
@@ -155,6 +164,7 @@ def prefix_sum_local_phase[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var offset = 1
 =======
     var offset = UInt(1)
@@ -163,11 +173,19 @@ def prefix_sum_local_phase[
     var offset = 1
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var offset = 1
 =======
     var offset = UInt(1)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var offset = 1
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     for i in range(Int(log2(Scalar[dtype](TPB)))):
         var current_val: output.ElementType = 0
         if local_i >= offset and local_i < TPB:
@@ -223,9 +241,16 @@ def prefix_sum_block_sum_phase(
 =======
 def prefix_sum_block_sum_phase[
     layout: Layout
+<<<<<<< HEAD
 ](output: LayoutTensor[dtype, layout, MutAnyOrigin], size: UInt):
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+](output: LayoutTensor[dtype, layout, MutAnyOrigin], size: Int):
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_i = block_dim.x * block_idx.x + thread_idx.x
 
     # Second pass: add previous block's sum to each element

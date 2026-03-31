@@ -57,10 +57,15 @@ def matmul_idiomatic_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var local_row = thread_idx.y
     var local_col = thread_idx.x
     var tiled_row = block_idx.y * MATMUL_BLOCK_DIM_XY + local_row
@@ -93,10 +98,12 @@ def matmul_idiomatic_tiled[
     var local_col = Int(thread_idx.x)
     var tiled_row = Int(block_idx.y) * MATMUL_BLOCK_DIM_XY + local_row
     var tiled_col = Int(block_idx.x) * MATMUL_BLOCK_DIM_XY + local_col
+=======
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 
     # Get the tile of the output matrix that this thread block is responsible for
     var out_tile = output.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
-        Int(block_idx.y), Int(block_idx.x)
+        block_idx.y, block_idx.x
     )
     var a_shared = LayoutTensor[
         dtype,
@@ -142,8 +149,11 @@ def matmul_idiomatic_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
             block_idx.y, idx
         )
         var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
@@ -163,7 +173,16 @@ def matmul_idiomatic_tiled[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+            block_idx.y, idx
+        )
+        var b_tile = b.tile[MATMUL_BLOCK_DIM_XY, MATMUL_BLOCK_DIM_XY](
+            idx, block_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
         )
 
         # Asynchronously copy tiles to shared memory with consistent orientation
@@ -286,9 +305,16 @@ def softmax_gpu_kernel[
         MutAnyOrigin,
         address_space=AddressSpace.SHARED,
     ].stack_allocation()
+<<<<<<< HEAD
     var global_i = Int(thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_i = thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
     # Initialize out-of-bounds (shared_max[local_i], global_i >= input_size) shared memory addresses to the minimum
     # finite value for dtype, ensuring that if these elements are accessed in the parallel max reduction below they

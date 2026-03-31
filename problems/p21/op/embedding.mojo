@@ -47,6 +47,7 @@ def embedding_kernel_coalesced[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var global_idx = block_idx.x * block_dim.x + thread_idx.x
 =======
     var global_idx = Int(block_idx.x * block_dim.x + thread_idx.x)
@@ -55,11 +56,19 @@ def embedding_kernel_coalesced[
     var global_idx = block_idx.x * block_dim.x + thread_idx.x
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var global_idx = block_idx.x * block_dim.x + thread_idx.x
 =======
     var global_idx = Int(block_idx.x * block_dim.x + thread_idx.x)
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var global_idx = block_idx.x * block_dim.x + thread_idx.x
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var total_elements = batch_size * seq_len * embed_dim
 
     if global_idx >= total_elements:
@@ -112,8 +121,11 @@ def embedding_kernel_2d[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var batch_seq_idx = block_idx.x * block_dim.x + thread_idx.x
     var embed_idx = block_idx.y * block_dim.y + thread_idx.y
 =======
@@ -127,7 +139,14 @@ def embedding_kernel_2d[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var batch_seq_idx = block_idx.x * block_dim.x + thread_idx.x
+    var embed_idx = block_idx.y * block_dim.y + thread_idx.y
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var total_positions = batch_size * seq_len
 
     if batch_seq_idx >= total_positions or embed_idx >= embed_dim:

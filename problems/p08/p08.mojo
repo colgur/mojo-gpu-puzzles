@@ -40,7 +40,7 @@ def add_10_shared(
 =======
     output: UnsafePointer[Scalar[dtype], MutAnyOrigin],
     a: UnsafePointer[Scalar[dtype], MutAnyOrigin],
-    size: UInt,
+    size: Int,
 ):
     var shared = stack_allocation[
         TPB,
@@ -73,8 +73,13 @@ def main() raises:
         var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
 
         ctx.enqueue_function[add_10_shared, add_10_shared](
+<<<<<<< HEAD
             out_tensor,
             a_tensor,
+=======
+            out,
+            a,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
             SIZE,
             grid_dim=BLOCKS_PER_GRID,
             block_dim=THREADS_PER_BLOCK,

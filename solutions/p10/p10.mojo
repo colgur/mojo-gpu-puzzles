@@ -32,8 +32,12 @@ def shared_memory_race(
 =======
     output: LayoutTensor[dtype, layout, MutAnyOrigin],
     a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+<<<<<<< HEAD
     size: UInt,
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+=======
+    size: Int,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 ):
     """Fixed: sequential access with barriers eliminates race conditions."""
     var row = thread_idx.y
@@ -81,8 +85,12 @@ def add_10_2d(
 =======
     output: LayoutTensor[dtype, layout, MutAnyOrigin],
     a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+<<<<<<< HEAD
     size: UInt,
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+=======
+    size: Int,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 ):
     var row = thread_idx.y
     var col = thread_idx.x

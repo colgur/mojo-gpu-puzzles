@@ -26,6 +26,7 @@ def naive_matmul[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     layout: Layout, size: Int
 =======
     layout: Layout, size: UInt
@@ -37,11 +38,19 @@ def naive_matmul[
     size: Int
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     size: Int
 =======
     layout: Layout, size: UInt
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    layout: Layout, size: Int
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -68,6 +77,7 @@ def single_block_matmul[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     layout: Layout, size: Int
 =======
     layout: Layout, size: UInt
@@ -79,11 +89,19 @@ def single_block_matmul[
     size: Int
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     size: Int
 =======
     layout: Layout, size: UInt
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    layout: Layout, size: Int
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 ](
     output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
@@ -147,6 +165,7 @@ def matmul_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     layout: Layout, size: Int
 =======
     layout: Layout, size: UInt
@@ -158,11 +177,19 @@ def matmul_tiled[
     size: Int
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     size: Int
 =======
     layout: Layout, size: UInt
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    layout: Layout, size: Int
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 ](
     output: TileTensor[mut=True, dtype, LayoutTiledType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutTiledType, ImmutAnyOrigin],
@@ -241,6 +268,7 @@ def matmul_idiomatic_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     layout: Layout, size: Int
 =======
     layout: Layout, size: UInt
@@ -252,11 +280,19 @@ def matmul_idiomatic_tiled[
     size: Int
 >>>>>>> 19dfa37 (Migrate LayoutTensor to TileTensor (#238))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     size: Int
 =======
     layout: Layout, size: UInt
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    layout: Layout, size: Int
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 ](
     output: TileTensor[mut=True, dtype, LayoutTiledType, MutAnyOrigin],
     a: TileTensor[mut=False, dtype, LayoutTiledType, ImmutAnyOrigin],
@@ -271,8 +307,11 @@ def matmul_idiomatic_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var out_tile = output.tile[TPB, TPB](block_idx.y, block_idx.x)
 <<<<<<< HEAD
 =======
@@ -305,6 +344,9 @@ def matmul_idiomatic_tiled[
 =======
 =======
     var out_tile = output.tile[TPB, TPB](Int(block_idx.y), Int(block_idx.x))
+=======
+    var out_tile = output.tile[TPB, TPB](block_idx.y, block_idx.x)
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
     var a_shared = LayoutTensor[
         dtype,
         Layout.row_major(TPB, TPB),
@@ -338,8 +380,11 @@ def matmul_idiomatic_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
         var a_tile = a.tile[TPB, TPB](block_idx.y, Int(idx))
         var b_tile = b.tile[TPB, TPB](Int(idx), block_idx.x)
 =======
@@ -353,7 +398,14 @@ def matmul_idiomatic_tiled[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+        var a_tile = a.tile[TPB, TPB](block_idx.y, Int(idx))
+        var b_tile = b.tile[TPB, TPB](Int(idx), block_idx.x)
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
         # Asynchronously copy tiles to shared memory with consistent orientation
         copy_dram_to_sram_async[
@@ -427,7 +479,11 @@ def main() raises:
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
 
         if argv()[1] == "--naive":
+<<<<<<< HEAD
             comptime kernel = naive_matmul[SIZE]
+=======
+            comptime kernel = naive_matmul[layout, SIZE]
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
             ctx.enqueue_function[kernel, kernel](
                 out_tensor,
                 a_tensor,
@@ -436,7 +492,11 @@ def main() raises:
                 block_dim=THREADS_PER_BLOCK,
             )
         elif argv()[1] == "--single-block":
+<<<<<<< HEAD
             comptime kernel = single_block_matmul[SIZE]
+=======
+            comptime kernel = single_block_matmul[layout, SIZE]
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
             ctx.enqueue_function[kernel, kernel](
                 out_tensor,
                 a_tensor,
@@ -454,7 +514,11 @@ def main() raises:
                 inp2, layout_tiled
             )
 
+<<<<<<< HEAD
             comptime kernel = matmul_tiled[SIZE_TILED]
+=======
+            comptime kernel = matmul_tiled[layout_tiled, SIZE_TILED]
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
             ctx.enqueue_function[kernel, kernel](
                 out_tensor_tiled,
                 a_tensor_tiled,
@@ -471,7 +535,11 @@ def main() raises:
                 inp2, layout_tiled
             )
 
+<<<<<<< HEAD
             comptime kernel = matmul_idiomatic_tiled[SIZE_TILED]
+=======
+            comptime kernel = matmul_idiomatic_tiled[layout_tiled, SIZE_TILED]
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
             ctx.enqueue_function[kernel, kernel](
                 out_tensor_tiled,
                 a_tensor_tiled,

@@ -49,8 +49,11 @@ def matmul_idiomatic_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var tiled_row = block_idx.y * tile_size_y + local_row
     var tiled_col = block_idx.x * tile_size_x + local_col
 
@@ -98,11 +101,13 @@ def matmul_idiomatic_tiled[
 =======
     var tiled_row = Int(block_idx.y * tile_size_y + local_row)
     var tiled_col = Int(block_idx.x * tile_size_x + local_col)
+=======
+    var tiled_row = block_idx.y * tile_size_y + local_row
+    var tiled_col = block_idx.x * tile_size_x + local_col
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 
     # Get the tile of the output matrix that this thread block is responsible for
-    var out_tile = output.tile[TILE_SIZE, TILE_SIZE](
-        Int(block_idx.y), Int(block_idx.x)
-    )
+    var out_tile = output.tile[TILE_SIZE, TILE_SIZE](block_idx.y, block_idx.x)
     var a_shared = LayoutTensor[
         dtype,
         Layout.row_major(TILE_SIZE, TILE_SIZE),
@@ -130,8 +135,11 @@ def matmul_idiomatic_tiled[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
         var a_tile = a.tile[TILE_SIZE, TILE_SIZE](block_idx.y, idx)
         var b_tile = b.tile[TILE_SIZE, TILE_SIZE](idx, block_idx.x)
 =======
@@ -145,7 +153,14 @@ def matmul_idiomatic_tiled[
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+        var a_tile = a.tile[TILE_SIZE, TILE_SIZE](block_idx.y, idx)
+        var b_tile = b.tile[TILE_SIZE, TILE_SIZE](idx, block_idx.x)
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
         # Asynchronously copy tiles to shared memory with consistent orientation
         copy_dram_to_sram_async[
@@ -223,6 +238,7 @@ def tensor_core_matrix_multiplication[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var warp_id = thread_idx.x // WARP_SIZE
 =======
     var warp_id = Int(thread_idx.x) // WARP_SIZE
@@ -231,11 +247,19 @@ def tensor_core_matrix_multiplication[
     var warp_id = thread_idx.x // WARP_SIZE
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var warp_id = thread_idx.x // WARP_SIZE
 =======
     var warp_id = Int(thread_idx.x) // WARP_SIZE
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var warp_id = thread_idx.x // WARP_SIZE
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var warps_in_n = BN // WN
     var warps_in_m = BM // WM
     var warp_y = warp_id // warps_in_n
@@ -246,6 +270,7 @@ def tensor_core_matrix_multiplication[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     var C_block_tile = C.tile[BM, BN](block_idx.y, block_idx.x)
 =======
     var C_block_tile = C.tile[BM, BN](Int(block_idx.y), Int(block_idx.x))
@@ -254,11 +279,19 @@ def tensor_core_matrix_multiplication[
     var C_block_tile = C.tile[BM, BN](block_idx.y, block_idx.x)
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var C_block_tile = C.tile[BM, BN](block_idx.y, block_idx.x)
 =======
     var C_block_tile = C.tile[BM, BN](Int(block_idx.y), Int(block_idx.x))
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+    var C_block_tile = C.tile[BM, BN](block_idx.y, block_idx.x)
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
     var C_warp_tile = C_block_tile.tile[WM, WN](warp_y, warp_x)
 
     var mma_op = TensorCore[A.dtype, C.dtype, Index(MMA_M, MMA_N, MMA_K)]()
@@ -312,8 +345,11 @@ def tensor_core_matrix_multiplication[
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
         var A_dram_tile = A.tile[BM, BK](block_idx.y, k_i)
         var B_dram_tile = B.tile[BK, BN](k_i, block_idx.x)
 =======
@@ -330,6 +366,10 @@ def tensor_core_matrix_multiplication[
 =======
         var A_dram_tile = A.tile[BM, BK](Int(block_idx.y), k_i)
         var B_dram_tile = B.tile[BK, BN](k_i, Int(block_idx.x))
+=======
+        var A_dram_tile = A.tile[BM, BK](block_idx.y, k_i)
+        var B_dram_tile = B.tile[BK, BN](k_i, block_idx.x)
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 
         copy_dram_to_sram_async[
             thread_layout=Layout.row_major(4, 8),
@@ -411,14 +451,20 @@ def main() raises:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
                     inp1_host[row * SIZE + col] = Scalar[dtype](val)
                     inp2_host[row * SIZE + col] = Scalar[dtype](2.0) * Scalar[
                         dtype
                     ](val)
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
@@ -429,10 +475,17 @@ def main() raises:
 >>>>>>> d09bc3f (Update all implicit type casts to be explicit (#237))
 =======
 =======
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
+=======
                     inp1_host[row * SIZE + col] = val
                     inp2_host[row * SIZE + col] = Float32(2.0) * val
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+<<<<<<< HEAD
 >>>>>>> 0c6dc9a (Mdoc/fixes (#235))
+=======
+=======
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
+>>>>>>> 209e57b (Update all implicit type casts to be explicit (#237))
 
             # Calculate expected CPU result: inp1 @ inp2
             for i in range(SIZE):

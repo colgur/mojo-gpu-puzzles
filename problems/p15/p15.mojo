@@ -36,8 +36,12 @@ def axis_sum[
 ](
     output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
     a: LayoutTensor[dtype, in_layout, ImmutAnyOrigin],
+<<<<<<< HEAD
     size: UInt,
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+=======
+    size: Int,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 ):
     var global_i = block_dim.x * block_idx.x + thread_idx.x
     var local_i = thread_idx.x

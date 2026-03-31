@@ -38,8 +38,12 @@ def dot_product(
     output: UnsafePointer[Scalar[dtype], MutAnyOrigin],
     a: UnsafePointer[Scalar[dtype], MutAnyOrigin],
     b: UnsafePointer[Scalar[dtype], MutAnyOrigin],
+<<<<<<< HEAD
     size: UInt,
 >>>>>>> 9cf6764 (Mdoc/fixes (#235))
+=======
+    size: Int,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
 ):
     # FILL ME IN (roughly 13 lines)
     ...
@@ -61,6 +65,7 @@ def main() raises:
             for i in range(SIZE):
                 a_host[i] = Scalar[dtype](i)
                 b_host[i] = Scalar[dtype](i)
+<<<<<<< HEAD
 
         var out_tensor = TileTensor(out, out_layout)
         var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
@@ -70,6 +75,13 @@ def main() raises:
             out_tensor,
             a_tensor,
             b_tensor,
+=======
+
+        ctx.enqueue_function[dot_product, dot_product](
+            out,
+            a,
+            b,
+>>>>>>> 99e55d4 (Update all implicit type casts to be explicit (#237))
             SIZE,
             grid_dim=BLOCKS_PER_GRID,
             block_dim=THREADS_PER_BLOCK,
