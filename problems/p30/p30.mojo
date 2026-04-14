@@ -1,6 +1,7 @@
 from std.gpu import thread_idx, block_dim, block_idx
 from std.gpu.host import DeviceContext
-from layout import Layout, LayoutTensor
+from layout import TileTensor
+from layout.tile_layout import row_major
 from std.sys import argv
 from std.testing import assert_almost_equal
 from std.benchmark import Bench, BenchConfig, Bencher, BenchId, keep
@@ -12,16 +13,15 @@ comptime BLOCKS_PER_GRID = (
     1,
 )  # Enough blocks to cover all elements
 comptime dtype = DType.float32
-comptime layout = Layout.row_major(SIZE)
+comptime layout = row_major[SIZE]()
+comptime LayoutType = type_of(layout)
 
 
 # ANCHOR: kernel1
-def kernel1[
-    layout: Layout
-](
-    output: LayoutTensor[dtype, layout, MutAnyOrigin],
-    a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
-    b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+def kernel1(
+    output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
+    a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
+    b: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
     size: Int,
 ):
 <<<<<<< HEAD
@@ -41,12 +41,10 @@ def kernel1[
 
 
 # ANCHOR: kernel2
-def kernel2[
-    layout: Layout
-](
-    output: LayoutTensor[dtype, layout, MutAnyOrigin],
-    a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
-    b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+def kernel2(
+    output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
+    a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
+    b: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
     size: Int,
 ):
 <<<<<<< HEAD
@@ -70,12 +68,10 @@ def kernel2[
 
 
 # ANCHOR: kernel3
-def kernel3[
-    layout: Layout
-](
-    output: LayoutTensor[dtype, layout, MutAnyOrigin],
-    a: LayoutTensor[dtype, layout, ImmutAnyOrigin],
-    b: LayoutTensor[dtype, layout, ImmutAnyOrigin],
+def kernel3(
+    output: TileTensor[mut=True, dtype, LayoutType, MutAnyOrigin],
+    a: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
+    b: TileTensor[mut=False, dtype, LayoutType, ImmutAnyOrigin],
     size: Int,
 ):
 <<<<<<< HEAD
@@ -105,7 +101,8 @@ def benchmark_kernel1_parameterized[test_size: Int](mut b: Bencher) raises:
     @parameter
     @always_inline
     def kernel1_workflow(ctx: DeviceContext) raises:
-        comptime layout = Layout.row_major(test_size)
+        comptime layout = row_major[test_size]()
+        comptime LayoutType = type_of(layout)
         var out = ctx.enqueue_create_buffer[dtype](test_size)
         out.enqueue_fill(0)
         var a = ctx.enqueue_create_buffer[dtype](test_size)
@@ -118,11 +115,11 @@ def benchmark_kernel1_parameterized[test_size: Int](mut b: Bencher) raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
-        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
-        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
-        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b_buf)
+        var out_tensor = TileTensor(out, layout)
+        var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
+        var b_tensor = TileTensor[mut=False, dtype, LayoutType](b_buf, layout)
 
-        ctx.enqueue_function[kernel1[layout], kernel1[layout]](
+        ctx.enqueue_function[kernel1, kernel1](
             out_tensor,
             a_tensor,
             b_tensor,
@@ -143,7 +140,8 @@ def benchmark_kernel2_parameterized[test_size: Int](mut b: Bencher) raises:
     @parameter
     @always_inline
     def kernel2_workflow(ctx: DeviceContext) raises:
-        comptime layout = Layout.row_major(test_size)
+        comptime layout = row_major[test_size]()
+        comptime LayoutType = type_of(layout)
         var out = ctx.enqueue_create_buffer[dtype](test_size)
         out.enqueue_fill(0)
         var a = ctx.enqueue_create_buffer[dtype](test_size)
@@ -156,11 +154,11 @@ def benchmark_kernel2_parameterized[test_size: Int](mut b: Bencher) raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
-        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
-        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
-        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b_buf)
+        var out_tensor = TileTensor(out, layout)
+        var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
+        var b_tensor = TileTensor[mut=False, dtype, LayoutType](b_buf, layout)
 
-        ctx.enqueue_function[kernel2[layout], kernel2[layout]](
+        ctx.enqueue_function[kernel2, kernel2](
             out_tensor,
             a_tensor,
             b_tensor,
@@ -181,7 +179,8 @@ def benchmark_kernel3_parameterized[test_size: Int](mut b: Bencher) raises:
     @parameter
     @always_inline
     def kernel3_workflow(ctx: DeviceContext) raises:
-        comptime layout = Layout.row_major(test_size)
+        comptime layout = row_major[test_size]()
+        comptime LayoutType = type_of(layout)
         var out = ctx.enqueue_create_buffer[dtype](test_size)
         out.enqueue_fill(0)
         var a = ctx.enqueue_create_buffer[dtype](test_size)
@@ -194,11 +193,11 @@ def benchmark_kernel3_parameterized[test_size: Int](mut b: Bencher) raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
-        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
-        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
-        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b_buf)
+        var out_tensor = TileTensor(out, layout)
+        var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
+        var b_tensor = TileTensor[mut=False, dtype, LayoutType](b_buf, layout)
 
-        ctx.enqueue_function[kernel3[layout], kernel3[layout]](
+        ctx.enqueue_function[kernel3, kernel3](
             out_tensor,
             a_tensor,
             b_tensor,
@@ -230,12 +229,12 @@ def test_kernel1() raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
-        # Create LayoutTensors
-        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
-        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
-        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b)
+        # Create TileTensors
+        var out_tensor = TileTensor(out, layout)
+        var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
+        var b_tensor = TileTensor[mut=False, dtype, LayoutType](b, layout)
 
-        ctx.enqueue_function[kernel1[layout], kernel1[layout]](
+        ctx.enqueue_function[kernel1, kernel1](
             out_tensor,
             a_tensor,
             b_tensor,
@@ -273,12 +272,12 @@ def test_kernel2() raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
-        # Create LayoutTensors
-        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
-        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
-        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b)
+        # Create TileTensors
+        var out_tensor = TileTensor(out, layout)
+        var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
+        var b_tensor = TileTensor[mut=False, dtype, LayoutType](b, layout)
 
-        ctx.enqueue_function[kernel2[layout], kernel2[layout]](
+        ctx.enqueue_function[kernel2, kernel2](
             out_tensor,
             a_tensor,
             b_tensor,
@@ -319,12 +318,12 @@ def test_kernel3() raises:
                 a_host[i] = Scalar[dtype](i + 1)
                 b_host[i] = Scalar[dtype](i + 2)
 
-        # Create LayoutTensors
-        var out_tensor = LayoutTensor[dtype, layout, MutAnyOrigin](out)
-        var a_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](a)
-        var b_tensor = LayoutTensor[dtype, layout, ImmutAnyOrigin](b)
+        # Create TileTensors
+        var out_tensor = TileTensor(out, layout)
+        var a_tensor = TileTensor[mut=False, dtype, LayoutType](a, layout)
+        var b_tensor = TileTensor[mut=False, dtype, LayoutType](b, layout)
 
-        ctx.enqueue_function[kernel3[layout], kernel3[layout]](
+        ctx.enqueue_function[kernel3, kernel3](
             out_tensor,
             a_tensor,
             b_tensor,

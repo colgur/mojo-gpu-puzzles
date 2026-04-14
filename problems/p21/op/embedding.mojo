@@ -1,7 +1,8 @@
 from std.math import ceildiv
 from std.gpu import thread_idx, block_idx, block_dim, grid_dim, barrier
 from std.gpu.host import DeviceContext
-from layout import Layout, LayoutTensor
+from layout import TileTensor
+from layout.tile_layout import row_major, TensorLayout
 from std.sys import argv
 from std.testing import assert_equal
 
@@ -10,18 +11,18 @@ comptime THREADS_PER_BLOCK = 256
 
 
 def embedding_kernel_coalesced[
-    indices_layout: Layout,
-    weights_layout: Layout,
-    out_layout: Layout,
     batch_size: Int,
     seq_len: Int,
     vocab_size: Int,
     embed_dim: Int,
+    OutLayout: TensorLayout,
+    IndicesLayout: TensorLayout,
+    WeightsLayout: TensorLayout,
     dtype: DType = DType.float32,
 ](
-    output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
-    indices: LayoutTensor[DType.int32, indices_layout, MutAnyOrigin],
-    weights: LayoutTensor[dtype, weights_layout, MutAnyOrigin],
+    output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
+    indices: TileTensor[mut=False, DType.int32, IndicesLayout, MutAnyOrigin],
+    weights: TileTensor[mut=False, dtype, WeightsLayout, MutAnyOrigin],
 ):
     """
     Memory-coalescing focused embedding kernel.
@@ -62,18 +63,18 @@ def embedding_kernel_coalesced[
 
 # ANCHOR: embedding_kernel_2d
 def embedding_kernel_2d[
-    indices_layout: Layout,
-    weights_layout: Layout,
-    out_layout: Layout,
     batch_size: Int,
     seq_len: Int,
     vocab_size: Int,
     embed_dim: Int,
+    OutLayout: TensorLayout,
+    IndicesLayout: TensorLayout,
+    WeightsLayout: TensorLayout,
     dtype: DType = DType.float32,
 ](
-    output: LayoutTensor[dtype, out_layout, MutAnyOrigin],
-    indices: LayoutTensor[DType.int32, indices_layout, MutAnyOrigin],
-    weights: LayoutTensor[dtype, weights_layout, MutAnyOrigin],
+    output: TileTensor[mut=True, dtype, OutLayout, MutAnyOrigin],
+    indices: TileTensor[mut=False, DType.int32, IndicesLayout, MutAnyOrigin],
+    weights: TileTensor[mut=False, dtype, WeightsLayout, MutAnyOrigin],
 ):
     """
     2D grid non-coalesced embedding kernel.
@@ -146,10 +147,6 @@ struct EmbeddingCustomOp:
         var indices_tensor = indices.to_layout_tensor()
         var weights_tensor = weights.to_layout_tensor()
 
-        comptime indices_layout = indices_tensor.layout
-        comptime weights_layout = weights_tensor.layout
-        comptime out_layout = output_tensor.layout
-
         comptime if target == "gpu":
             var gpu_ctx = ctx.get_device_context()
 
@@ -170,9 +167,6 @@ struct EmbeddingCustomOp:
 
             # Compile and launch optimized kernel
             comptime kernel = embedding_kernel_coalesced[
-                indices_layout,
-                weights_layout,
-                out_layout,
                 batch_size,
                 seq_len,
                 vocab_size,
@@ -228,10 +222,6 @@ struct Embedding2DCustomOp:
         var indices_tensor = indices.to_layout_tensor()
         var weights_tensor = weights.to_layout_tensor()
 
-        comptime indices_layout = indices_tensor.layout
-        comptime weights_layout = weights_tensor.layout
-        comptime out_layout = output_tensor.layout
-
         comptime if target == "gpu":
             var gpu_ctx = ctx.get_device_context()
 
@@ -255,9 +245,6 @@ struct Embedding2DCustomOp:
 
             # Compile and launch 2D kernel
             comptime kernel = embedding_kernel_2d[
-                indices_layout,
-                weights_layout,
-                out_layout,
                 batch_size,
                 seq_len,
                 vocab_size,
